@@ -6,8 +6,10 @@ import '../../../../core/widgets/neumorphic_card.dart';
 import '../../models/telemetry_data.dart';
 
 /// 8-hour shift window hourly production line graph.
-/// Teal line = actual output. Dashed teal line = target (833 kg/hr).
-/// All data is backend-owned — no frontend logic.
+/// - Target Line & Area Fill: Warm Accent Orange (#F68420 / #F6A560)
+/// - Actual Line & Live Dot: Dynamic Telemetry Teal (#11CFC9 with #3311CFC9 pulse glow)
+/// - Target Labels & Units: Muted Slate Grey (#8C929C)
+/// - Gridlines & Baselines: Soft Neumorphic Neutral Grey (#E2E4E9)
 class HourlyProductionLineGraphCard extends StatelessWidget {
   final List<ProductionDataPoint> data;
   final ProductionMetrics production;
@@ -36,7 +38,7 @@ class HourlyProductionLineGraphCard extends StatelessWidget {
                   color: AppColors.surface,
                   boxShadow: AppShadows.circularButton(),
                 ),
-                child: const Icon(Icons.show_chart_rounded, color: AppColors.teal, size: 20),
+                child: const Icon(Icons.show_chart_rounded, color: AppColors.telemetryTeal, size: 20),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -46,7 +48,7 @@ class HourlyProductionLineGraphCard extends StatelessWidget {
                     const Text('Hourly Production', style: AppTypography.heading2),
                     Text(
                       'Shift ${production.currentShift} · 8-hr window · Target: ${production.hourlyTargetKg.toInt()} kg/hr',
-                      style: AppTypography.caption,
+                      style: AppTypography.caption.copyWith(color: AppColors.slateGrey),
                     ),
                   ],
                 ),
@@ -57,24 +59,24 @@ class HourlyProductionLineGraphCard extends StatelessWidget {
 
           if (data.isNotEmpty)
             SizedBox(
-              height: 100,
+              height: 110,
               child: _ProductionLinePainterWidget(points: data),
             )
           else
             Container(
-              height: 100,
+              height: 110,
               alignment: Alignment.center,
-              child: const Text('Awaiting shift data...', style: TextStyle(color: AppColors.textMuted)),
+              child: const Text('Awaiting shift data...', style: TextStyle(color: AppColors.slateGrey)),
             ),
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
 
           // Legend
           Row(
             children: [
-              _legendDot(AppColors.teal, 'Actual output'),
+              _legendDot(AppColors.telemetryTeal, 'Actual output'),
               const SizedBox(width: 16),
-              _legendDash(AppColors.teal.withValues(alpha: 0.5), 'Target (${production.hourlyTargetKg.toInt()} kg/hr)'),
+              _legendDash(AppColors.targetLineOrange, 'Target (${production.hourlyTargetKg.toInt()} kg/hr)'),
             ],
           ),
         ],
@@ -84,9 +86,23 @@ class HourlyProductionLineGraphCard extends StatelessWidget {
 
   Widget _legendDot(Color color, String label) => Row(
         children: [
-          Container(width: 8, height: 8, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
-          const SizedBox(width: 5),
-          Text(label, style: const TextStyle(fontSize: 10.5, color: AppColors.textMuted)),
+          Container(
+            width: 9,
+            height: 9,
+            decoration: BoxDecoration(
+              color: color,
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.telemetryTealGlow,
+                  blurRadius: 4,
+                  spreadRadius: 1,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 6),
+          Text(label, style: const TextStyle(fontSize: 11, color: AppColors.slateGrey, fontWeight: FontWeight.w500)),
         ],
       );
 
@@ -94,14 +110,14 @@ class HourlyProductionLineGraphCard extends StatelessWidget {
         children: [
           Container(
             width: 16,
-            height: 2,
+            height: 2.5,
             decoration: BoxDecoration(
               color: color,
               borderRadius: BorderRadius.circular(1),
             ),
           ),
-          const SizedBox(width: 5),
-          Text(label, style: const TextStyle(fontSize: 10.5, color: AppColors.textMuted)),
+          const SizedBox(width: 6),
+          Text(label, style: const TextStyle(fontSize: 11, color: AppColors.slateGrey, fontWeight: FontWeight.w500)),
         ],
       );
 }
@@ -129,26 +145,48 @@ class _ProductionLinePainter extends CustomPainter {
     if (points.isEmpty) return;
 
     final double targetKg = points.first.targetKg;
-    final double maxVal = (targetKg * 1.2).ceilToDouble();
-    final double minVal = (targetKg * 0.7).floorToDouble();
+    final double maxVal = (targetKg * 1.25).ceilToDouble();
+    final double minVal = (targetKg * 0.65).floorToDouble();
     final double range = maxVal - minVal;
-    final double labelAreaHeight = 14.0;
+    final double labelAreaHeight = 16.0;
     final double graphHeight = size.height - labelAreaHeight;
 
     double xStep = size.width / (points.length <= 1 ? 1 : points.length - 1);
 
-    // --- Target dashed line ---
+    // --- Baselines & Gridlines: Soft Neumorphic Neutral Grey (#E2E4E9) ---
+    final gridPaint = Paint()
+      ..color = AppColors.gridGrey
+      ..strokeWidth = 1.0;
+
+    // Bottom Baseline
+    canvas.drawLine(Offset(0, graphHeight), Offset(size.width, graphHeight), gridPaint);
+
+    // Mid Baseline
+    canvas.drawLine(Offset(0, graphHeight * 0.5), Offset(size.width, graphHeight * 0.5),
+        gridPaint..color = AppColors.gridGrey.withValues(alpha: 0.5));
+
+    // --- Target Line: Warm Accent Orange (#F68420) dashed ---
     final targetY = graphHeight - ((targetKg - minVal) / range * graphHeight);
-    final dashPaint = Paint()
-      ..color = AppColors.teal.withValues(alpha: 0.45)
-      ..strokeWidth = 1.2;
+    final targetDashPaint = Paint()
+      ..color = AppColors.targetLineOrange
+      ..strokeWidth = 1.5;
     double dashX = 0;
     while (dashX < size.width) {
-      canvas.drawLine(Offset(dashX, targetY), Offset(dashX + 7, targetY), dashPaint);
-      dashX += 12;
+      canvas.drawLine(Offset(dashX, targetY), Offset(dashX + 6, targetY), targetDashPaint);
+      dashX += 11;
     }
 
-    // --- Actual line + fill ---
+    // Target label at right
+    final targetTp = TextPainter(
+      text: TextSpan(
+        text: '${targetKg.toInt()} kg',
+        style: const TextStyle(fontSize: 9, color: AppColors.slateGrey, fontWeight: FontWeight.w600),
+      ),
+      textDirection: TextDirection.ltr,
+    )..layout();
+    targetTp.paint(canvas, Offset(size.width - targetTp.width - 2, targetY - targetTp.height - 2));
+
+    // --- Area Fill: Warm Accent Orange (#F6A560) gradient ---
     final fillPath = Path();
     final linePath = Path();
     for (int i = 0; i < points.length; i++) {
@@ -172,38 +210,55 @@ class _ProductionLinePainter extends CustomPainter {
         ..shader = LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [AppColors.teal.withValues(alpha: 0.15), AppColors.teal.withValues(alpha: 0.0)],
+          colors: [
+            AppColors.targetAreaFillOrange.withValues(alpha: 0.24),
+            AppColors.targetAreaFillOrange.withValues(alpha: 0.02),
+          ],
         ).createShader(Rect.fromLTWH(0, 0, size.width, graphHeight)),
     );
 
+    // --- Actual Line: Dynamic Telemetry Teal (#11CFC9) ---
     canvas.drawPath(
       linePath,
       Paint()
-        ..color = AppColors.teal
-        ..strokeWidth = 2.0
+        ..color = AppColors.telemetryTeal
+        ..strokeWidth = 2.2
         ..style = PaintingStyle.stroke
         ..strokeCap = StrokeCap.round
         ..strokeJoin = StrokeJoin.round,
     );
 
-    // --- Dots + labels ---
-    final dotFill = Paint()..color = AppColors.teal;
+    // --- Dots & Live Dot with Pulse Glow (#3311CFC9) ---
     final dotBg = Paint()..color = Colors.white;
+    final dotFill = Paint()..color = AppColors.telemetryTeal;
     final tp = TextPainter(textDirection: TextDirection.ltr);
 
     for (int i = 0; i < points.length; i++) {
       final double x = i * xStep;
       final double y = graphHeight - ((points[i].actualKg - minVal) / range * graphHeight);
-      canvas.drawCircle(Offset(x, y), 4.0, dotBg);
-      canvas.drawCircle(Offset(x, y), 2.5, dotFill);
+      final bool isLiveDot = (i == points.length - 1);
 
-      // Hour label below
+      if (isLiveDot) {
+        // Live Dot Pulse Glow (#3311CFC9)
+        canvas.drawCircle(Offset(x, y), 8.0, Paint()..color = AppColors.telemetryTealGlow);
+        canvas.drawCircle(Offset(x, y), 4.5, dotBg);
+        canvas.drawCircle(Offset(x, y), 3.0, dotFill);
+      } else {
+        canvas.drawCircle(Offset(x, y), 3.5, dotBg);
+        canvas.drawCircle(Offset(x, y), 2.2, dotFill);
+      }
+
+      // Hour label below in Muted Slate Grey (#8C929C)
       tp.text = TextSpan(
         text: points[i].hour,
-        style: const TextStyle(fontSize: 9, color: AppColors.textMuted, fontWeight: FontWeight.w500),
+        style: TextStyle(
+          fontSize: 9.5,
+          color: isLiveDot ? AppColors.telemetryTeal : AppColors.slateGrey,
+          fontWeight: isLiveDot ? FontWeight.bold : FontWeight.w500,
+        ),
       );
       tp.layout();
-      tp.paint(canvas, Offset(x - tp.width / 2, size.height - labelAreaHeight));
+      tp.paint(canvas, Offset(x - tp.width / 2, size.height - labelAreaHeight + 2));
     }
   }
 

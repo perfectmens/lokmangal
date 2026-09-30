@@ -136,7 +136,7 @@ class TopFloatingDock extends StatelessWidget {
                       GestureDetector(
                         onTap: onLogoTap,
                         child: Image.asset(
-                          'assets/logo.png',
+                          'assets/auraliss_logo.png',
                           height: 44,
                           width: 44,
                           fit: BoxFit.contain,

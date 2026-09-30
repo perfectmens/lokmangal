@@ -28,6 +28,14 @@ class AppColors {
   static const Color blueMuted = Color(0xFF718096);
   static const Color cyan      = Color(0xFF9ECFCB);
 
+  // Graph & Telemetry Palette
+  static const Color targetLineOrange    = Color(0xFFF68420); // Warm Accent Orange
+  static const Color targetAreaFillOrange = Color(0xFFF6A560); // Warm Accent Area Fill
+  static const Color telemetryTeal       = Color(0xFF11CFC9); // Dynamic Telemetry Teal
+  static const Color telemetryTealGlow   = Color(0x3311CFC9); // Pulse glow
+  static const Color slateGrey           = Color(0xFF8C929C); // Muted Slate Grey
+  static const Color gridGrey            = Color(0xFFE2E4E9); // Soft Neumorphic Neutral Grey
+
   // Status Colors
   static const Color success = teal;
   static const Color warning = orange;

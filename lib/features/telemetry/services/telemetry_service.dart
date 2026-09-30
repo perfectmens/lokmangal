@@ -145,7 +145,37 @@ class TelemetryService {
         shiftKwh: double.parse((prev.electricity.shiftKwh + 0.05).toStringAsFixed(1)),
         dailyMaxKwh: 3221.0,
         dailyKwh: double.parse((prev.electricity.dailyKwh + 0.05).toStringAsFixed(1)),
+        hourlyKwhHistory: prev.electricity.hourlyKwhHistory.isNotEmpty
+            ? [
+                ...prev.electricity.hourlyKwhHistory.sublist(0, prev.electricity.hourlyKwhHistory.length - 1),
+                KwhDataPoint(
+                  hour: prev.electricity.hourlyKwhHistory.last.hour,
+                  kwh: double.parse(hourlyKwh.toStringAsFixed(1)),
+                ),
+              ]
+            : PlantTelemetry.initialMock().electricity.hourlyKwhHistory,
       ),
+      hourlyProductionHistory: prev.hourlyProductionHistory.isNotEmpty
+          ? [
+              ...prev.hourlyProductionHistory.sublist(0, prev.hourlyProductionHistory.length - 1),
+              ProductionDataPoint(
+                hour: prev.hourlyProductionHistory.last.hour,
+                actualKg: min(833.0, prev.production.hourlyActualKg + 0.2),
+                targetKg: prev.hourlyProductionHistory.last.targetKg,
+              ),
+            ]
+          : PlantTelemetry.initialMock().hourlyProductionHistory,
+      shiftHistory: prev.shiftHistory.isNotEmpty
+          ? [
+              ...prev.shiftHistory.where((s) => !s.isCurrent),
+              ShiftHistoryEntry(
+                shiftLabel: prev.shiftHistory.firstWhere((s) => s.isCurrent, orElse: () => prev.shiftHistory.last).shiftLabel,
+                actualKg: min(6667.0, prev.production.shiftActualKg + 0.5),
+                targetKg: 6667.0,
+                isCurrent: true,
+              ),
+            ]
+          : PlantTelemetry.initialMock().shiftHistory,
     );
   }
 

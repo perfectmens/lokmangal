@@ -135,12 +135,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Stack(
       children: [
-        // Swipe right from left edge to open drawer
-        GestureDetector(
-          onHorizontalDragEnd: (details) {
-            if (details.primaryVelocity != null && details.primaryVelocity! > 200) {
+        NotificationListener<ScrollNotification>(
+          onNotification: (notification) {
+            if (_selectedPageIndex == 0 &&
+                notification is OverscrollNotification &&
+                notification.overscroll < -12) {
               _scaffoldKey.currentState?.openDrawer();
+              return true;
             }
+            return false;
           },
           child: PageView.builder(
             controller: _pageController,
@@ -149,6 +152,22 @@ class _HomeScreenState extends State<HomeScreen> {
             itemCount: activePages.length,
             itemBuilder: (context, index) {
               return activePages[index].builder(context);
+            },
+          ),
+        ),
+
+        // Left edge swipe zone to reliably trigger drawer opening
+        Positioned(
+          left: 0,
+          top: 110,
+          bottom: 0,
+          width: 50,
+          child: GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onHorizontalDragUpdate: (details) {
+              if ((details.primaryDelta ?? 0) > 12) {
+                _scaffoldKey.currentState?.openDrawer();
+              }
             },
           ),
         ),
@@ -183,6 +202,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
+      drawerEnableOpenDragGesture: true,
+      drawerEdgeDragWidth: 80.0,
       backgroundColor: AppColors.background,
       drawer: SideDrawer(
         selectedPageIndex: _selectedPageIndex,
