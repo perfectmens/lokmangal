@@ -14,7 +14,6 @@ class PlantCapacityCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final double dailyTonnes = data.dailyActualKg / 1000.0;
     final double capacityPct = (dailyTonnes / data.plantCapacityTpd).clamp(0.0, 1.0);
-    final double shiftPct = (data.shiftActualKg / data.shiftTargetKg).clamp(0.0, 1.0);
 
     return NeumorphicCard(
       padding: const EdgeInsets.all(18.0),
@@ -38,13 +37,13 @@ class PlantCapacityCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Executive Capacity Scorecard', style: AppTypography.heading2),
+                    const Text('Plant Design Capacity', style: AppTypography.heading2),
                     Text(
-                      'Plant Rating: 20 TPD (3 Shifts/Day)',
+                      '${data.product} • ${data.plantCapacityTpd.toInt()} TPD Rating',
                       style: AppTypography.caption,
                     ),
                   ],
@@ -53,15 +52,15 @@ class PlantCapacityCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: AppColors.teal.withValues(alpha: 0.12),
+                  color: AppColors.tealLight,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Text(
-                  'OEE: 94.6%',
-                  style: TextStyle(
+                child: Text(
+                  '${data.shiftsPerDay} Shifts/Day',
+                  style: const TextStyle(
                     color: AppColors.teal,
                     fontWeight: FontWeight.bold,
-                    fontSize: 12,
+                    fontSize: 11.5,
                   ),
                 ),
               ),
@@ -69,7 +68,7 @@ class PlantCapacityCard extends StatelessWidget {
           ),
           const SizedBox(height: 18),
 
-          // Big 20 TPD Yield Metric
+          // 20 TPD Yield Metric
           Container(
             padding: const EdgeInsets.all(14.0),
             decoration: BoxDecoration(
@@ -142,36 +141,24 @@ class PlantCapacityCard extends StatelessWidget {
 
           const SizedBox(height: 14),
 
-          // Shift 1, 2, 3 Breakdown
+          // Operational Targets Summary
           Row(
             children: [
               Expanded(
-                child: _buildShiftTile(
-                  shiftNumber: 1,
-                  actualKg: data.shiftActualKg,
-                  targetKg: data.shiftTargetKg,
-                  pct: shiftPct,
-                  isActive: data.shiftNumber == 1,
+                child: _buildMetricTile(
+                  label: 'Shift Target',
+                  value: '${data.shiftTargetKg.toInt()} kg',
+                  subtext: '${data.shiftDurationHours}h Duration',
+                  color: AppColors.teal,
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 10),
               Expanded(
-                child: _buildShiftTile(
-                  shiftNumber: 2,
-                  actualKg: 0,
-                  targetKg: data.shiftTargetKg,
-                  pct: 0,
-                  isActive: data.shiftNumber == 2,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: _buildShiftTile(
-                  shiftNumber: 3,
-                  actualKg: 0,
-                  targetKg: data.shiftTargetKg,
-                  pct: 0,
-                  isActive: data.shiftNumber == 3,
+                child: _buildMetricTile(
+                  label: 'Hourly Target',
+                  value: '${data.hourlyTargetKg.toInt()} kg',
+                  subtext: 'Pacing Target',
+                  color: AppColors.orange,
                 ),
               ),
             ],
@@ -181,54 +168,57 @@ class PlantCapacityCard extends StatelessWidget {
     );
   }
 
-  Widget _buildShiftTile({
-    required int shiftNumber,
-    required double actualKg,
-    required double targetKg,
-    required double pct,
-    required bool isActive,
+  Widget _buildMetricTile({
+    required String label,
+    required String value,
+    required String subtext,
+    required Color color,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
-        border: isActive ? Border.all(color: AppColors.orange, width: 1.2) : null,
+        borderRadius: BorderRadius.circular(14),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x100A0D2F),
+            color: Color(0x0C0A0D2F),
             offset: Offset(2, 2),
-            blurRadius: 4,
+            blurRadius: 5,
           ),
           BoxShadow(
             color: Colors.white,
             offset: Offset(-2, -2),
-            blurRadius: 4,
+            blurRadius: 5,
           ),
         ],
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Shift $shiftNumber',
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.bold,
-              color: isActive ? AppColors.orange : AppColors.textMuted,
+            label,
+            style: const TextStyle(
+              fontSize: 11.5,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textMuted,
             ),
           ),
           const SizedBox(height: 4),
           Text(
-            isActive ? '${(actualKg / 1000).toStringAsFixed(1)} T' : 'Pending',
+            value,
             style: const TextStyle(
-              fontSize: 13,
+              fontSize: 16,
               fontWeight: FontWeight.w800,
               color: AppColors.textPrimary,
             ),
           ),
           Text(
-            'Target: ${(targetKg / 1000).toStringAsFixed(1)} T',
-            style: const TextStyle(fontSize: 9.5, color: AppColors.textMuted),
+            subtext,
+            style: TextStyle(
+              fontSize: 10.5,
+              fontWeight: FontWeight.w600,
+              color: color,
+            ),
           ),
         ],
       ),

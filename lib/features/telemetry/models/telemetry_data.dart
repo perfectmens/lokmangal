@@ -1,9 +1,9 @@
 enum PowderMakerStatus {
-  systemReady('System Ready', 'SYSTEM_READY'),
-  mixing('Mixing', 'MIXING'),
-  crystallization('Crystallization', 'CRYSTALLIZATION'),
-  powderMaking('Powder Making', 'POWDER_MAKING'),
-  discharge('Discharge', 'DISCHARGE');
+  systemReady('System Ready', 'System_Ready'),
+  mixing('Mixing', 'Mixing'),
+  crystallization('Crystallization', 'Crystallization'),
+  powderMaking('Powder Making', 'Powder_making'),
+  discharge('Discharge', 'Discharge');
 
   final String displayName;
   final String code;
@@ -52,178 +52,166 @@ class PlantInfo {
 }
 
 class ProductionMetrics {
-  final int shiftNumber;
-  final int shiftDurationHours;
-  final int shiftElapsedSeconds;
-  final double hourlyTargetKg;
-  final double hourlyActualKg;
-  final double shiftTargetKg;
-  final double shiftActualKg;
+  final String product;
   final double plantCapacityTpd;
+  final int shiftsPerDay;
+  final double shiftTargetKg;
+  final int shiftDurationHours;
+  final double hourlyTargetKg;
+  final int currentShift;
+  final double hourlyActualKg;
+  final double shiftActualKg;
   final double dailyActualKg;
 
   const ProductionMetrics({
-    required this.shiftNumber,
-    required this.shiftDurationHours,
-    required this.shiftElapsedSeconds,
-    required this.hourlyTargetKg,
-    required this.hourlyActualKg,
-    required this.shiftTargetKg,
-    required this.shiftActualKg,
+    required this.product,
     required this.plantCapacityTpd,
+    required this.shiftsPerDay,
+    required this.shiftTargetKg,
+    required this.shiftDurationHours,
+    required this.hourlyTargetKg,
+    required this.currentShift,
+    required this.hourlyActualKg,
+    required this.shiftActualKg,
     required this.dailyActualKg,
   });
 
   factory ProductionMetrics.fromJson(Map<String, dynamic> json) {
     return ProductionMetrics(
-      shiftNumber: json['shift_number'] as int? ?? 1,
-      shiftDurationHours: json['shift_duration_hours'] as int? ?? 8,
-      shiftElapsedSeconds: json['shift_elapsed_seconds'] as int? ?? 14400,
-      hourlyTargetKg: (json['hourly_target_kg'] as num?)?.toDouble() ?? 833.0,
-      hourlyActualKg: (json['hourly_actual_kg'] as num?)?.toDouble() ?? 795.0,
-      shiftTargetKg: (json['shift_target_kg'] as num?)?.toDouble() ?? 6667.0,
-      shiftActualKg: (json['shift_actual_kg'] as num?)?.toDouble() ?? 3410.0,
+      product: json['product'] as String? ?? 'Jaggery Powder',
       plantCapacityTpd: (json['plant_capacity_tpd'] as num?)?.toDouble() ?? 20.0,
+      shiftsPerDay: json['shifts_per_day'] as int? ?? 3,
+      shiftTargetKg: (json['shift_target_kg'] as num?)?.toDouble() ?? 6667.0,
+      shiftDurationHours: json['shift_duration_hours'] as int? ?? 8,
+      hourlyTargetKg: (json['hourly_target_kg'] as num?)?.toDouble() ?? 833.0,
+      currentShift: json['current_shift'] as int? ?? 1,
+      hourlyActualKg: (json['hourly_actual_kg'] as num?)?.toDouble() ?? 795.0,
+      shiftActualKg: (json['shift_actual_kg'] as num?)?.toDouble() ?? 3410.0,
       dailyActualKg: (json['daily_actual_kg'] as num?)?.toDouble() ?? 8920.0,
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'shift_number': shiftNumber,
-        'shift_duration_hours': shiftDurationHours,
-        'shift_elapsed_seconds': shiftElapsedSeconds,
-        'hourly_target_kg': hourlyTargetKg,
-        'hourly_actual_kg': hourlyActualKg,
-        'shift_target_kg': shiftTargetKg,
-        'shift_actual_kg': shiftActualKg,
+        'product': product,
         'plant_capacity_tpd': plantCapacityTpd,
+        'shifts_per_day': shiftsPerDay,
+        'shift_target_kg': shiftTargetKg,
+        'shift_duration_hours': shiftDurationHours,
+        'hourly_target_kg': hourlyTargetKg,
+        'current_shift': currentShift,
+        'hourly_actual_kg': hourlyActualKg,
+        'shift_actual_kg': shiftActualKg,
         'daily_actual_kg': dailyActualKg,
       };
 }
 
 class PowderMakerData {
-  final PowderMakerStatus status;
   final double batchCapacityKg;
+  final PowderMakerStatus status;
   final double batchCurrentKg;
   final int batchCycleSeconds;
-  final int completedBatchesToday;
 
   const PowderMakerData({
-    required this.status,
     required this.batchCapacityKg,
+    required this.status,
     required this.batchCurrentKg,
     required this.batchCycleSeconds,
-    required this.completedBatchesToday,
   });
 
   factory PowderMakerData.fromJson(Map<String, dynamic> json) {
     return PowderMakerData(
-      status: PowderMakerStatus.fromString(json['status'] as String? ?? 'Crystallization'),
       batchCapacityKg: (json['batch_capacity_kg'] as num?)?.toDouble() ?? 500.0,
+      status: PowderMakerStatus.fromString(json['status'] as String? ?? 'Crystallization'),
       batchCurrentKg: (json['batch_current_kg'] as num?)?.toDouble() ?? 482.5,
       batchCycleSeconds: json['batch_cycle_seconds'] as int? ?? 185,
-      completedBatchesToday: json['completed_batches_today'] as int? ?? 18,
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'status': status.code,
         'batch_capacity_kg': batchCapacityKg,
+        'status': status.code,
         'batch_current_kg': batchCurrentKg,
         'batch_cycle_seconds': batchCycleSeconds,
-        'completed_batches_today': completedBatchesToday,
       };
 }
 
 class StorageMetrics {
-  final double silo1Kg;
-  final double silo2Kg;
-  final double combinedSilosKg;
+  final int numberOfSilos;
   final double combinedMaxCapacityKg;
-  final double syrupTankKg;
+  final double combinedSilosKg;
+  final bool silosLoadCell;
   final double syrupTankMaxKg;
-  final bool loadCellsHealthy;
+  final double syrupTankKg;
+  final bool syrupTankLoadCell;
 
   const StorageMetrics({
-    required this.silo1Kg,
-    required this.silo2Kg,
-    required this.combinedSilosKg,
+    required this.numberOfSilos,
     required this.combinedMaxCapacityKg,
-    required this.syrupTankKg,
+    required this.combinedSilosKg,
+    required this.silosLoadCell,
     required this.syrupTankMaxKg,
-    required this.loadCellsHealthy,
+    required this.syrupTankKg,
+    required this.syrupTankLoadCell,
   });
 
   factory StorageMetrics.fromJson(Map<String, dynamic> json) {
-    final s1 = (json['silo_1_kg'] as num?)?.toDouble() ?? 1820.0;
-    final s2 = (json['silo_2_kg'] as num?)?.toDouble() ?? 2150.0;
-    final combined = (json['combined_silos_kg'] as num?)?.toDouble() ?? (s1 + s2);
-
     return StorageMetrics(
-      silo1Kg: s1,
-      silo2Kg: s2,
-      combinedSilosKg: combined,
+      numberOfSilos: json['number_of_silos'] as int? ?? 2,
       combinedMaxCapacityKg: (json['combined_max_capacity_kg'] as num?)?.toDouble() ?? 5000.0,
-      syrupTankKg: (json['syrup_tank_kg'] as num?)?.toDouble() ?? 3280.0,
+      combinedSilosKg: (json['combined_silos_kg'] as num?)?.toDouble() ?? 3970.0,
+      silosLoadCell: json['silos_load_cell'] as bool? ?? true,
       syrupTankMaxKg: (json['syrup_tank_max_kg'] as num?)?.toDouble() ?? 5000.0,
-      loadCellsHealthy: json['load_cells_healthy'] as bool? ?? true,
+      syrupTankKg: (json['syrup_tank_kg'] as num?)?.toDouble() ?? 3280.0,
+      syrupTankLoadCell: json['syrup_tank_load_cell'] as bool? ?? true,
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'silo_1_kg': silo1Kg,
-        'silo_2_kg': silo2Kg,
-        'combined_silos_kg': combinedSilosKg,
+        'number_of_silos': numberOfSilos,
         'combined_max_capacity_kg': combinedMaxCapacityKg,
-        'syrup_tank_kg': syrupTankKg,
+        'combined_silos_kg': combinedSilosKg,
+        'silos_load_cell': silosLoadCell,
         'syrup_tank_max_kg': syrupTankMaxKg,
-        'load_cells_healthy': loadCellsHealthy,
+        'syrup_tank_kg': syrupTankKg,
+        'syrup_tank_load_cell': syrupTankLoadCell,
       };
 }
 
 class ElectricityMetrics {
-  final double currentPowerKw;
-  final double hourlyKwh;
   final double hourlyMaxKwh;
-  final double shiftKwh;
+  final double hourlyKwh;
   final double shiftMaxKwh;
-  final double dailyKwh;
+  final double shiftKwh;
   final double dailyMaxKwh;
-  final double specificEnergyConsumption;
+  final double dailyKwh;
 
   const ElectricityMetrics({
-    required this.currentPowerKw,
-    required this.hourlyKwh,
     required this.hourlyMaxKwh,
-    required this.shiftKwh,
+    required this.hourlyKwh,
     required this.shiftMaxKwh,
-    required this.dailyKwh,
+    required this.shiftKwh,
     required this.dailyMaxKwh,
-    required this.specificEnergyConsumption,
+    required this.dailyKwh,
   });
 
   factory ElectricityMetrics.fromJson(Map<String, dynamic> json) {
     return ElectricityMetrics(
-      currentPowerKw: (json['current_power_kw'] as num?)?.toDouble() ?? 98.4,
-      hourlyKwh: (json['hourly_kwh'] as num?)?.toDouble() ?? 112.3,
       hourlyMaxKwh: (json['hourly_max_kwh'] as num?)?.toDouble() ?? 134.0,
-      shiftKwh: (json['shift_kwh'] as num?)?.toDouble() ?? 612.0,
+      hourlyKwh: (json['hourly_kwh'] as num?)?.toDouble() ?? 112.3,
       shiftMaxKwh: (json['shift_max_kwh'] as num?)?.toDouble() ?? 1074.0,
-      dailyKwh: (json['daily_kwh'] as num?)?.toDouble() ?? 1840.5,
+      shiftKwh: (json['shift_kwh'] as num?)?.toDouble() ?? 612.0,
       dailyMaxKwh: (json['daily_max_kwh'] as num?)?.toDouble() ?? 3221.0,
-      specificEnergyConsumption: (json['sec_kwh_per_kg'] as num?)?.toDouble() ?? 0.179,
+      dailyKwh: (json['daily_kwh'] as num?)?.toDouble() ?? 1840.5,
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'current_power_kw': currentPowerKw,
-        'hourly_kwh': hourlyKwh,
         'hourly_max_kwh': hourlyMaxKwh,
-        'shift_kwh': shiftKwh,
+        'hourly_kwh': hourlyKwh,
         'shift_max_kwh': shiftMaxKwh,
-        'daily_kwh': dailyKwh,
+        'shift_kwh': shiftKwh,
         'daily_max_kwh': dailyMaxKwh,
-        'sec_kwh_per_kg': specificEnergyConsumption,
+        'daily_kwh': dailyKwh,
       };
 }
 
@@ -275,41 +263,39 @@ class PlantTelemetry {
         activeProduct: 'Jaggery Powder',
       ),
       production: const ProductionMetrics(
-        shiftNumber: 1,
-        shiftDurationHours: 8,
-        shiftElapsedSeconds: 15420,
-        hourlyTargetKg: 833.0,
-        hourlyActualKg: 795.0,
-        shiftTargetKg: 6667.0,
-        shiftActualKg: 3410.0,
+        product: 'Jaggery Powder',
         plantCapacityTpd: 20.0,
+        shiftsPerDay: 3,
+        shiftTargetKg: 6667.0,
+        shiftDurationHours: 8,
+        hourlyTargetKg: 833.0,
+        currentShift: 1,
+        hourlyActualKg: 795.0,
+        shiftActualKg: 3410.0,
         dailyActualKg: 8920.0,
       ),
       powderMaker: const PowderMakerData(
-        status: PowderMakerStatus.crystallization,
         batchCapacityKg: 500.0,
+        status: PowderMakerStatus.crystallization,
         batchCurrentKg: 482.5,
         batchCycleSeconds: 185,
-        completedBatchesToday: 18,
       ),
       storage: const StorageMetrics(
-        silo1Kg: 1820.0,
-        silo2Kg: 2150.0,
-        combinedSilosKg: 3970.0,
+        numberOfSilos: 2,
         combinedMaxCapacityKg: 5000.0,
-        syrupTankKg: 3280.0,
+        combinedSilosKg: 3970.0,
+        silosLoadCell: true,
         syrupTankMaxKg: 5000.0,
-        loadCellsHealthy: true,
+        syrupTankKg: 3280.0,
+        syrupTankLoadCell: true,
       ),
       electricity: const ElectricityMetrics(
-        currentPowerKw: 98.4,
-        hourlyKwh: 112.3,
         hourlyMaxKwh: 134.0,
-        shiftKwh: 612.0,
+        hourlyKwh: 112.3,
         shiftMaxKwh: 1074.0,
-        dailyKwh: 1840.5,
+        shiftKwh: 612.0,
         dailyMaxKwh: 3221.0,
-        specificEnergyConsumption: 0.179,
+        dailyKwh: 1840.5,
       ),
     );
   }

@@ -6,13 +6,13 @@ import '../../models/telemetry_data.dart';
 class OperationsHeaderBanner extends StatelessWidget {
   final PlantTelemetry telemetry;
   final bool isSimulated;
-  final String shiftCountdown;
+  final String shiftInfo;
 
   const OperationsHeaderBanner({
     super.key,
     required this.telemetry,
     required this.isSimulated,
-    required this.shiftCountdown,
+    required this.shiftInfo,
   });
 
   @override
@@ -42,7 +42,7 @@ class OperationsHeaderBanner extends StatelessWidget {
                         letterSpacing: -0.3,
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 3),
                     Text(
                       '${telemetry.plant.activeProduct} • ${telemetry.plant.products.join(" & ")}',
                       style: const TextStyle(
@@ -55,12 +55,12 @@ class OperationsHeaderBanner extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: (isSimulated ? AppColors.orange : AppColors.teal).withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(16),
+                  color: isSimulated ? AppColors.orangeLight : AppColors.tealLight,
+                  borderRadius: BorderRadius.circular(14),
                   border: Border.all(
-                    color: (isSimulated ? AppColors.orange : AppColors.teal).withValues(alpha: 0.3),
+                    color: (isSimulated ? AppColors.orange : AppColors.teal).withValues(alpha: 0.35),
                   ),
                 ),
                 child: Row(
@@ -78,7 +78,7 @@ class OperationsHeaderBanner extends StatelessWidget {
                     Text(
                       isSimulated ? 'SIMULATED' : 'LIVE',
                       style: TextStyle(
-                        fontSize: 11,
+                        fontSize: 10.5,
                         fontWeight: FontWeight.w800,
                         color: isSimulated ? AppColors.orange : AppColors.teal,
                         letterSpacing: 0.5,
@@ -100,7 +100,7 @@ class OperationsHeaderBanner extends StatelessWidget {
                   const Icon(Icons.schedule_rounded, size: 15, color: AppColors.textMuted),
                   const SizedBox(width: 5),
                   Text(
-                    'Shift ${telemetry.production.shiftNumber} of 3 (${telemetry.production.shiftDurationHours}h)',
+                    shiftInfo,
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
@@ -109,10 +109,10 @@ class OperationsHeaderBanner extends StatelessWidget {
                   ),
                 ],
               ),
-              Text(
-                shiftCountdown,
-                style: const TextStyle(
-                  fontSize: 12,
+              const Text(
+                'Plant Floor Active',
+                style: TextStyle(
+                  fontSize: 11.5,
                   fontWeight: FontWeight.w700,
                   color: AppColors.teal,
                 ),

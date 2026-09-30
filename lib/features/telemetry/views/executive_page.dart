@@ -14,15 +14,18 @@ class ExecutivePage extends StatelessWidget {
     final vm = context.watch<TelemetryViewModel>();
     final telemetry = vm.telemetry;
 
+    // Guaranteed clearance: Status Bar + Dock Height (64) + Top Margin (12) + Spacing (16)
+    final double topClearance = MediaQuery.of(context).padding.top + 64.0 + 12.0 + 16.0;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.only(
-          top: 100.0, // Clearance for top floating dock
+        padding: EdgeInsets.only(
+          top: topClearance,
           left: 16.0,
           right: 16.0,
-          bottom: 32.0, // Generous clearance without bottom nav
+          bottom: 32.0,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

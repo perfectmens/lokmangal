@@ -38,14 +38,14 @@ class TopFloatingDock extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 12.0, left: 16.0, right: 16.0),
       child: Container(
-        height: 72,
+        height: 64,
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: BorderRadius.circular(36),
+          borderRadius: BorderRadius.circular(32),
           boxShadow: AppShadows.dock(),
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(36),
+          borderRadius: BorderRadius.circular(32),
           child: Stack(
             children: [
               // 1. Scrollable Menus in the background

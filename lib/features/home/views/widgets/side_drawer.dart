@@ -56,10 +56,10 @@ class SideDrawer extends StatelessWidget {
                         ),
                         SizedBox(height: 2),
                         Text(
-                          'Operator ID: OP-4029',
+                          'Plant Telemetry & Controls • 20 TPD',
                           style: TextStyle(
                             color: AppColors.textMuted,
-                            fontSize: 12.5,
+                            fontSize: 12.0,
                             fontWeight: FontWeight.w500,
                           ),
                         ),

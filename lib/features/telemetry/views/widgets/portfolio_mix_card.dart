@@ -28,7 +28,7 @@ class PortfolioMixCard extends StatelessWidget {
                   boxShadow: AppShadows.circularButton(),
                 ),
                 child: const Icon(
-                  Icons.pie_chart_rounded,
+                  Icons.inventory_2_rounded,
                   color: AppColors.teal,
                   size: 20,
                 ),
@@ -38,9 +38,9 @@ class PortfolioMixCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Product Portfolio Mix', style: AppTypography.heading2),
+                    Text('Product Lines', style: AppTypography.heading2),
                     Text(
-                      'Corelife Output Distribution',
+                      'Corelife Wholefoods Portfolio',
                       style: AppTypography.caption,
                     ),
                   ],
@@ -53,10 +53,11 @@ class PortfolioMixCard extends StatelessWidget {
             children: [
               Expanded(
                 child: _buildProductTile(
-                  name: 'Jaggery Powder',
-                  share: '72%',
-                  status: 'Active Milling',
+                  name: 'Jaggery',
+                  sub: 'Jaggery Powder',
+                  detail: '20 TPD Plant Rating',
                   color: AppColors.teal,
+                  bgColor: AppColors.tealLight,
                   icon: Icons.grain_rounded,
                 ),
               ),
@@ -64,9 +65,10 @@ class PortfolioMixCard extends StatelessWidget {
               Expanded(
                 child: _buildProductTile(
                   name: 'Liquid Sugars',
-                  share: '28%',
-                  status: 'Tank Storage',
+                  sub: 'Syrup Tank System',
+                  detail: '5,000 kg Tank Capacity',
                   color: AppColors.orange,
+                  bgColor: AppColors.orangeLight,
                   icon: Icons.water_drop_rounded,
                 ),
               ),
@@ -79,58 +81,63 @@ class PortfolioMixCard extends StatelessWidget {
 
   Widget _buildProductTile({
     required String name,
-    required String share,
-    required String status,
+    required String sub,
+    required String detail,
     required Color color,
+    required Color bgColor,
     required IconData icon,
   }) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(14),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x100A0D2F),
-            offset: Offset(3, 3),
-            blurRadius: 6,
+            color: Color(0x0C0A0D2F),
+            offset: Offset(2, 2),
+            blurRadius: 5,
           ),
           BoxShadow(
             color: Colors.white,
-            offset: Offset(-3, -3),
-            blurRadius: 6,
+            offset: Offset(-2, -2),
+            blurRadius: 5,
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Icon(icon, size: 18, color: color),
-              Text(
-                share,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
-                  color: color,
-                ),
-              ),
-            ],
+          Container(
+            width: 32,
+            height: 32,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: bgColor,
+            ),
+            child: Icon(icon, size: 17, color: color),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
           Text(
             name,
             style: const TextStyle(
-              fontSize: 13,
+              fontSize: 14,
               fontWeight: FontWeight.bold,
               color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 2),
           Text(
-            status,
+            sub,
+            style: TextStyle(
+              fontSize: 11.5,
+              fontWeight: FontWeight.w600,
+              color: color,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            detail,
             style: AppTypography.caption.copyWith(fontSize: 10.5),
           ),
         ],

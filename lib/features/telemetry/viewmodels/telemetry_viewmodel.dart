@@ -27,13 +27,8 @@ class TelemetryViewModel extends ChangeNotifier {
   ProductionMetrics get production => _telemetry.production;
   ElectricityMetrics get electricity => _telemetry.electricity;
 
-  String get formattedShiftCountdown {
-    final totalShiftSec = production.shiftDurationHours * 3600;
-    final remainingSec = (totalShiftSec - production.shiftElapsedSeconds).clamp(0, totalShiftSec);
-    final hours = remainingSec ~/ 3600;
-    final minutes = (remainingSec % 3600) ~/ 60;
-    return '${hours.toString().padLeft(2, '0')}h ${minutes.toString().padLeft(2, '0')}m remaining';
-  }
+  String get formattedShiftInfo =>
+      'Shift ${production.currentShift} of ${production.shiftsPerDay} (${production.shiftDurationHours}h Duration)';
 
   void _init({bool autoStart = true}) {
     _telemetry = _service.currentTelemetry;

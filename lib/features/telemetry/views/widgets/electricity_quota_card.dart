@@ -38,34 +38,16 @@ class ElectricityQuotaCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              Expanded(
+              const Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Electricity Quota & Power', style: AppTypography.heading2),
+                    Text('Electricity Consumption Caps', style: AppTypography.heading2),
                     Text(
-                      'Live Demand: ${data.currentPowerKw.toStringAsFixed(1)} kW',
-                      style: AppTypography.caption.copyWith(
-                        color: AppColors.textPrimary,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      'Hourly, Shift & Daily Max Limits',
+                      style: AppTypography.caption,
                     ),
                   ],
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.teal.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  'SEC: ${data.specificEnergyConsumption.toStringAsFixed(3)} kWh/kg',
-                  style: const TextStyle(
-                    color: AppColors.teal,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 11,
-                  ),
                 ),
               ),
             ],
@@ -78,9 +60,8 @@ class ElectricityQuotaCard extends StatelessWidget {
             current: data.hourlyKwh,
             max: data.hourlyMaxKwh,
             pct: hourlyPct,
-            unit: 'kWh',
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
 
           // Shift Quota (1074 kWh max)
           _buildQuotaRow(
@@ -88,9 +69,8 @@ class ElectricityQuotaCard extends StatelessWidget {
             current: data.shiftKwh,
             max: data.shiftMaxKwh,
             pct: shiftPct,
-            unit: 'kWh',
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
 
           // Daily Quota (3221 kWh max)
           _buildQuotaRow(
@@ -98,31 +78,6 @@ class ElectricityQuotaCard extends StatelessWidget {
             current: data.dailyKwh,
             max: data.dailyMaxKwh,
             pct: dailyPct,
-            unit: 'kWh',
-          ),
-
-          const SizedBox(height: 14),
-
-          // Energy Efficiency Benchmark Note
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: AppColors.background,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: AppShadows.insetField(),
-            ),
-            child: Row(
-              children: [
-                const Icon(Icons.eco_rounded, size: 16, color: AppColors.teal),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    'Energy efficiency is within optimal band (< 0.185 kWh/kg standard benchmark).',
-                    style: AppTypography.caption.copyWith(fontSize: 11.5),
-                  ),
-                ),
-              ],
-            ),
           ),
         ],
       ),
@@ -134,7 +89,6 @@ class ElectricityQuotaCard extends StatelessWidget {
     required double current,
     required double max,
     required double pct,
-    required String unit,
   }) {
     final bool isNearLimit = pct > 0.85;
     final Color barColor = isNearLimit ? AppColors.orange : AppColors.teal;
@@ -154,7 +108,7 @@ class ElectricityQuotaCard extends StatelessWidget {
               ),
             ),
             Text(
-              '${current.toStringAsFixed(1)} / ${max.toInt()} $unit (${(pct * 100).toInt()}%)',
+              '${current.toStringAsFixed(1)} / ${max.toInt()} kWh (${(pct * 100).toInt()}%)',
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,

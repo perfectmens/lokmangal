@@ -44,7 +44,7 @@ class PowderMakerCard extends StatelessWidget {
                   children: [
                     const Text('Powder Maker', style: AppTypography.heading2),
                     Text(
-                      'Batch Capacity: ${data.batchCapacityKg.toInt()} kg • 5-Stage Automation',
+                      'Batch Capacity: ${data.batchCapacityKg.toInt()} kg',
                       style: AppTypography.caption,
                     ),
                   ],
@@ -53,7 +53,7 @@ class PowderMakerCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: AppColors.teal.withValues(alpha: 0.12),
+                  color: AppColors.tealLight,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: AppColors.teal.withValues(alpha: 0.3)),
                 ),
@@ -84,7 +84,7 @@ class PowderMakerCard extends StatelessWidget {
                 style: AppTypography.subtitle.copyWith(fontWeight: FontWeight.bold),
               ),
               Text(
-                '$pctInt% filled',
+                '$pctInt% of 500 kg',
                 style: const TextStyle(
                   color: AppColors.teal,
                   fontWeight: FontWeight.w700,
@@ -97,10 +97,10 @@ class PowderMakerCard extends StatelessWidget {
 
           // Neumorphic Recessed Progress Bar
           Container(
-            height: 12,
+            height: 10,
             decoration: BoxDecoration(
               color: AppColors.background,
-              borderRadius: BorderRadius.circular(6),
+              borderRadius: BorderRadius.circular(5),
               boxShadow: AppShadows.insetField(),
             ),
             child: FractionallySizedBox(
@@ -108,52 +108,11 @@ class PowderMakerCard extends StatelessWidget {
               widthFactor: pct,
               child: Container(
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [AppColors.teal, Color(0xFF38E5DE)],
-                  ),
-                  borderRadius: BorderRadius.circular(6),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color(0x3311CFC9),
-                      blurRadius: 4,
-                      offset: Offset(0, 1),
-                    ),
-                  ],
+                  color: AppColors.teal,
+                  borderRadius: BorderRadius.circular(5),
                 ),
               ),
             ),
-          ),
-
-          const SizedBox(height: 14),
-
-          // Footer Metrics: Cycle timer & batches completed
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  const Icon(Icons.timer_outlined, size: 15, color: AppColors.textMuted),
-                  const SizedBox(width: 4),
-                  Text(
-                    'Cycle: ${_formatSeconds(data.batchCycleSeconds)}',
-                    style: AppTypography.caption.copyWith(fontWeight: FontWeight.w600),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  const Icon(Icons.inventory_2_outlined, size: 15, color: AppColors.textMuted),
-                  const SizedBox(width: 4),
-                  Text(
-                    'Today: ${data.completedBatchesToday} Batches Done',
-                    style: AppTypography.caption.copyWith(
-                      color: AppColors.textPrimary,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-            ],
           ),
         ],
       ),
@@ -178,11 +137,11 @@ class PowderMakerCard extends StatelessWidget {
             List<BoxShadow> shadows;
 
             if (isCurrent) {
-              bgColor = AppColors.surface;
+              bgColor = AppColors.tealLight;
               textColor = AppColors.teal;
               shadows = [];
             } else if (isPassed) {
-              bgColor = AppColors.teal.withValues(alpha: 0.1);
+              bgColor = AppColors.surface;
               textColor = AppColors.teal;
               shadows = [];
             } else {
@@ -190,7 +149,7 @@ class PowderMakerCard extends StatelessWidget {
               textColor = AppColors.textMuted;
               shadows = const [
                 BoxShadow(
-                  color: Color(0x100A0D2F),
+                  color: Color(0x0C0A0D2F),
                   offset: Offset(2, 2),
                   blurRadius: 4,
                 ),
@@ -211,7 +170,7 @@ class PowderMakerCard extends StatelessWidget {
                     color: bgColor,
                     borderRadius: BorderRadius.circular(10),
                     border: isCurrent
-                        ? Border.all(color: AppColors.teal, width: 1.5)
+                        ? Border.all(color: AppColors.teal, width: 1.2)
                         : null,
                     boxShadow: shadows,
                   ),
@@ -262,11 +221,5 @@ class PowderMakerCard extends StatelessWidget {
       case PowderMakerStatus.discharge:
         return 'Discharge';
     }
-  }
-
-  static String _formatSeconds(int sec) {
-    final m = sec ~/ 60;
-    final s = sec % 60;
-    return '${m.toString().padLeft(2, '0')}:${s.toString().padLeft(2, '0')} min';
   }
 }

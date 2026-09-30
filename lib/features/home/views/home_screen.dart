@@ -96,12 +96,12 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Corelife Operator', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
+            Text('Corelife Operations', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
             SizedBox(height: 2),
-            Text('operator@corelife.com • OP-4029', style: TextStyle(color: AppColors.textMuted, fontSize: 13)),
+            Text('Corelife Wholefoods Facility', style: TextStyle(color: AppColors.textMuted, fontSize: 13)),
             SizedBox(height: 14),
-            Text('Plant: Corelife Wholefoods', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-            Text('Rating: 20 TPD (Jaggery Powder)', style: TextStyle(fontSize: 13, color: AppColors.textSecondary)),
+            Text('Products: Jaggery Powder & Liquid Sugars', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+            Text('Design Capacity: 20 TPD (3 Shifts/Day)', style: TextStyle(fontSize: 13, color: AppColors.textSecondary)),
           ],
         ),
         actions: [

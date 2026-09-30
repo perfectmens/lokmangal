@@ -37,13 +37,13 @@ class HourlyPacingCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Floor Production Pacing', style: AppTypography.heading2),
+                    const Text('Production Targets', style: AppTypography.heading2),
                     Text(
-                      'Hourly & Shift Operational Quotas',
+                      '${data.product} • ${data.shiftDurationHours}h Shift Pace',
                       style: AppTypography.caption,
                     ),
                   ],
@@ -53,13 +53,13 @@ class HourlyPacingCard extends StatelessWidget {
           ),
           const SizedBox(height: 16),
 
-          // Hourly Pace
+          // Hourly Pace (833 kg target)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Hourly Pace: ${data.hourlyActualKg.toStringAsFixed(0)} kg',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                'Hourly Output: ${data.hourlyActualKg.toStringAsFixed(0)} kg',
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5),
               ),
               Text(
                 'Target: ${data.hourlyTargetKg.toInt()} kg/hr (${(hourlyPct * 100).toInt()}%)',
@@ -84,13 +84,13 @@ class HourlyPacingCard extends StatelessWidget {
 
           const SizedBox(height: 14),
 
-          // Shift Pace
+          // Shift Pace (6667 kg target)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Shift Yield: ${data.shiftActualKg.toStringAsFixed(0)} kg',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                'Shift Output: ${data.shiftActualKg.toStringAsFixed(0)} kg',
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5),
               ),
               Text(
                 'Target: ${data.shiftTargetKg.toInt()} kg (${(shiftPct * 100).toInt()}%)',
