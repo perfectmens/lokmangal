@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../app_update/views/settings_page.dart';
-import '../../plant/viewmodels/plant_viewmodel.dart';
-import '../../plant/views/pages/alarms_tab_view.dart';
-import '../../plant/views/pages/energy_tab_view.dart';
-import '../../plant/views/pages/home_tab_view.dart';
-import '../../plant/views/pages/process_tab_view.dart';
-import '../../plant/views/pages/production_tab_view.dart';
 import '../page_registry/home_page_registry.dart';
+import 'pages/skeleton_page.dart';
 import 'widgets/neumorphic_bottom_nav.dart';
 import 'widgets/side_drawer.dart';
 import 'widgets/top_floating_dock.dart';
@@ -26,23 +20,27 @@ class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _navScrollController = ScrollController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  int _selectedPageIndex = 0; // 0: Home, 1: Process, 2: Production, 3: Energy, 4: Alarms
+  int _selectedPageIndex = 0; // Active PageView index (0: menu1, 1: menu2)
   int _selectedDrawerIndex = 0; // 0: Home, 5: Settings, etc.
+  int _bottomNavIndex = 0;
 
   @override
   void initState() {
     super.initState();
 
-    // Developer provision registry initialization
+    // Initialize developer page registry with the 2 active skeleton pages
     HomeScreenPageRegistry.initialize(
-      telemetryPageBuilder: (context) => HomeTabView(onNavigateTab: _navigateToPage),
-      energyPageBuilder: (context) => const EnergyTabView(),
+      primaryPageBuilder: (context) => const SkeletonPage(
+        title: 'Primary Dashboard',
+        subtitle: 'Main Workspace & Operations',
+        icon: Icons.dashboard_rounded,
+      ),
+      secondaryPageBuilder: (context) => const SkeletonPage(
+        title: 'Secondary Analytics',
+        subtitle: 'Metrics, Insights & Reports',
+        icon: Icons.insights_rounded,
+      ),
     );
-
-    // Initial load and polling of authoritative plant telemetry
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<PlantViewModel>().initialize();
-    });
   }
 
   @override
@@ -72,7 +70,6 @@ class _HomeScreenState extends State<HomeScreen> {
       _selectedPageIndex = index;
     });
 
-    // Auto-scroll nav dock to keep active item visible
     if (_navScrollController.hasClients) {
       final double offset = (index - 1) * 80.0;
       _navScrollController.animateTo(
@@ -84,8 +81,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _showProfilePopup(BuildContext context) {
-    final plantVm = context.read<PlantViewModel>();
-
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -103,46 +98,19 @@ class _HomeScreenState extends State<HomeScreen> {
               child: const Icon(Icons.person_rounded, color: AppColors.teal),
             ),
             const SizedBox(width: 12),
-            const Text('Operator Session', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            const Text('User Session', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
           ],
         ),
-        content: Column(
+        content: const Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Corelife Plant Operator', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
-            const SizedBox(height: 2),
-            const Text('operator@corelife.com', style: TextStyle(color: AppColors.textMuted, fontSize: 13)),
-            const SizedBox(height: 14),
-            const Text('Plant: Corelife Wholefoods', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-            const Text('Unit: Jaggery & Liquid Sugars', style: TextStyle(fontSize: 13, color: AppColors.textSecondary)),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Container(
-                  width: 8,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: plantVm.isOnline ? AppColors.teal : AppColors.orange,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  'Connection: ${plantVm.isOnline ? "ONLINE (Simulation Live)" : "OFFLINE"}',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    color: plantVm.isOnline ? AppColors.teal : AppColors.orange,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'Host: ${plantVm.baseUrl}',
-              style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
-            ),
+            Text('Operator Profile', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
+            SizedBox(height: 2),
+            Text('user@auraliss.com', style: TextStyle(color: AppColors.textMuted, fontSize: 13)),
+            SizedBox(height: 14),
+            Text('Application: Auraliss Platform', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+            Text('Environment: Production Ready', style: TextStyle(fontSize: 13, color: AppColors.textSecondary)),
           ],
         ),
         actions: [
@@ -163,12 +131,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildBody() {
-    // If settings is selected from side drawer
-    if (_selectedDrawerIndex == 5) {
+    // If settings is selected from side drawer or bottom nav
+    if (_selectedDrawerIndex == 5 || _bottomNavIndex == 3) {
       return SettingsPage(
         onBack: () {
           setState(() {
             _selectedDrawerIndex = 0;
+            _bottomNavIndex = 0;
           });
         },
       );
@@ -178,23 +147,19 @@ class _HomeScreenState extends State<HomeScreen> {
       return _buildDrawerFeaturePage(_selectedDrawerIndex);
     }
 
-    // 5 Corelife Destinations
-    final List<Widget> pages = [
-      HomeTabView(onNavigateTab: _navigateToPage),
-      const ProcessTabView(),
-      const ProductionTabView(),
-      const EnergyTabView(),
-      const AlarmsTabView(),
-    ];
+    final activePages = HomeScreenPageRegistry.activePages;
 
     return Stack(
       children: [
-        // Background PageView with the 5 Corelife tabs
-        PageView(
+        // Background PageView with active skeleton pages
+        PageView.builder(
           controller: _pageController,
           onPageChanged: _onPageChanged,
           physics: const BouncingScrollPhysics(),
-          children: pages,
+          itemCount: activePages.length,
+          itemBuilder: (context, index) {
+            return activePages[index].builder(context);
+          },
         ),
 
         // Floating Top Neumorphic Dock
@@ -210,14 +175,31 @@ class _HomeScreenState extends State<HomeScreen> {
                 HapticFeedback.lightImpact();
                 _showProfilePopup(context);
               },
+              items: activePages
+                  .map((p) => DockNavItem(label: p.menuLabel, icon: p.icon))
+                  .toList(),
             ),
           ),
         ),
 
         // Neumorphic Bottom Navigation Bar
         NeumorphicBottomNav(
-          currentIndex: _selectedPageIndex,
-          onTap: _navigateToPage,
+          currentIndex: _bottomNavIndex,
+          onTap: (index) {
+            HapticFeedback.lightImpact();
+            setState(() {
+              _bottomNavIndex = index;
+              if (index == 0) {
+                _selectedDrawerIndex = 0;
+                _pageController.animateToPage(0, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+              } else if (index == 1) {
+                _selectedDrawerIndex = 0;
+                _pageController.animateToPage(1, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+              } else if (index == 3) {
+                _selectedDrawerIndex = 5; // Open Settings
+              }
+            });
+          },
         ),
       ],
     );
@@ -229,31 +211,31 @@ class _HomeScreenState extends State<HomeScreen> {
 
     switch (index) {
       case 1:
-        title = 'Powder Making Process';
-        icon = Icons.precision_manufacturing_rounded;
+        title = 'Explore Modules';
+        icon = Icons.explore_rounded;
         break;
       case 2:
-        title = 'Production Targets';
-        icon = Icons.factory_rounded;
+        title = 'Favorites';
+        icon = Icons.favorite_rounded;
         break;
       case 3:
-        title = 'Energy Analytics';
-        icon = Icons.bolt_rounded;
+        title = 'Notifications';
+        icon = Icons.notifications_rounded;
         break;
       case 4:
-        title = 'Plant Alarms';
-        icon = Icons.notifications_active_rounded;
+        title = 'Activity & Logs';
+        icon = Icons.list_alt_rounded;
         break;
       case 6:
-        title = 'Help & SCADA Specs';
+        title = 'Help & Documentation';
         icon = Icons.help_outline_rounded;
         break;
       case 7:
-        title = 'About Auraliss Platform';
+        title = 'About Auraliss';
         icon = Icons.info_outline_rounded;
         break;
       default:
-        title = 'Operator Profile';
+        title = 'User Profile';
         icon = Icons.person_rounded;
     }
 
@@ -289,7 +271,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Icon(icon, size: 64, color: AppColors.teal),
                     const SizedBox(height: 16),
-                    Text('$title is active and synchronized with telemetry.',
+                    Text('$title skeleton is ready for implementation.',
                         style: const TextStyle(color: AppColors.textSecondary)),
                   ],
                 ),
@@ -307,8 +289,9 @@ class _HomeScreenState extends State<HomeScreen> {
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
-        // System Back Button Unwinding as specified in architectural guide
-        if (_selectedDrawerIndex != 0) {
+        if (_bottomNavIndex != 0) {
+          setState(() => _bottomNavIndex = 0);
+        } else if (_selectedDrawerIndex != 0) {
           setState(() => _selectedDrawerIndex = 0);
         } else if (_selectedPageIndex != 0) {
           _navigateToPage(0);
@@ -320,15 +303,11 @@ class _HomeScreenState extends State<HomeScreen> {
         key: _scaffoldKey,
         backgroundColor: AppColors.background,
         drawerEdgeDragWidth: MediaQuery.of(context).size.width * 0.3,
-        drawer: _selectedDrawerIndex == 0
+        drawer: (_bottomNavIndex == 0 && _selectedDrawerIndex == 0)
             ? SideDrawer(
-                selectedDrawerIndex: _selectedPageIndex,
+                selectedDrawerIndex: _selectedDrawerIndex,
                 onSelectDrawerIndex: (index) {
-                  if (index >= 0 && index <= 4) {
-                    _navigateToPage(index);
-                  } else {
-                    setState(() => _selectedDrawerIndex = index);
-                  }
+                  setState(() => _selectedDrawerIndex = index);
                 },
               )
             : null,

@@ -9,7 +9,6 @@ import '../../../core/widgets/neumorphic_switch.dart';
 import '../../../core/widgets/neumorphic_text_field.dart';
 import '../repositories/app_update_repository_impl.dart';
 import '../viewmodels/app_update_viewmodel.dart';
-import '../../plant/viewmodels/plant_viewmodel.dart';
 import 'widgets/update_card.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -25,18 +24,15 @@ class _SettingsPageState extends State<SettingsPage> {
   late final TextEditingController _tokenController;
   late final TextEditingController _ownerController;
   late final TextEditingController _repoController;
-  late final TextEditingController _serverUrlController;
   bool _obscureToken = true;
 
   @override
   void initState() {
     super.initState();
     final vm = context.read<AppUpdateViewModel>();
-    final plantVm = context.read<PlantViewModel>();
     _tokenController = TextEditingController(text: vm.githubToken ?? '');
     _ownerController = TextEditingController(text: vm.githubOwner);
     _repoController = TextEditingController(text: vm.githubRepo);
-    _serverUrlController = TextEditingController(text: plantVm.baseUrl);
   }
 
   @override
@@ -44,7 +40,6 @@ class _SettingsPageState extends State<SettingsPage> {
     _tokenController.dispose();
     _ownerController.dispose();
     _repoController.dispose();
-    _serverUrlController.dispose();
     super.dispose();
   }
 
@@ -322,71 +317,6 @@ class _SettingsPageState extends State<SettingsPage> {
                       icon: Icons.save_rounded,
                       tone: NeumorphicTone.orange,
                       isFullWidth: true,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 18),
-
-              // 4. Industrial Telemetry Simulation Host
-              NeumorphicCard(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 36,
-                          height: 36,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.surface,
-                            boxShadow: AppShadows.circularButton(),
-                          ),
-                          child: const Icon(
-                            Icons.sensors_rounded,
-                            color: AppColors.teal,
-                            size: 18,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        const Text('Telemetry Backend & Simulation Host', style: AppTypography.heading2),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    const Text(
-                      'Address of local PC simulation server or internet cloud telemetry API.',
-                      style: TextStyle(fontSize: 12, color: AppColors.textMuted),
-                    ),
-                    const SizedBox(height: 14),
-                    NeumorphicTextField(
-                      controller: _serverUrlController,
-                      label: 'Simulation Host URL',
-                      hint: 'http://192.168.68.64:8000',
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: NeumorphicButton(
-                            onPressed: () {
-                              final plantVm = context.read<PlantViewModel>();
-                              plantVm.updateBaseUrl(_serverUrlController.text);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Connecting to ${plantVm.baseUrl}...'),
-                                  backgroundColor: AppColors.teal,
-                                ),
-                              );
-                            },
-                            text: 'Connect & Test',
-                            icon: Icons.sync_rounded,
-                            tone: NeumorphicTone.teal,
-                            isFullWidth: true,
-                          ),
-                        ),
-                      ],
                     ),
                   ],
                 ),

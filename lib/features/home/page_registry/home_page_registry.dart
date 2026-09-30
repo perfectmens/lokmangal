@@ -41,38 +41,38 @@ class HomeScreenPageRegistry {
   static bool _initialized = false;
 
   static void initialize({
-    required Widget Function(BuildContext) telemetryPageBuilder,
-    required Widget Function(BuildContext) energyPageBuilder,
+    required Widget Function(BuildContext) primaryPageBuilder,
+    required Widget Function(BuildContext) secondaryPageBuilder,
   }) {
     if (_initialized) return;
 
     _registry.clear();
 
     // -------------------------------------------------------------
-    // Page 0: Industrial Milling & Process Telemetry (ACTIVE IN UI)
+    // Page 0: Primary View (ACTIVE IN UI)
     // -------------------------------------------------------------
     _registry.add(
       HomePageModule(
-        id: 'telemetry_overview',
+        id: 'primary_dashboard',
         menuLabel: 'menu1',
-        title: 'Milling & Boiler Telemetry',
-        icon: Icons.precision_manufacturing_rounded,
-        builder: telemetryPageBuilder,
-        isVisibleInUi: true, // Visible in UI
+        title: 'Primary View',
+        icon: Icons.dashboard_rounded,
+        builder: primaryPageBuilder,
+        isVisibleInUi: true,
       ),
     );
 
     // -------------------------------------------------------------
-    // Page 1: Energy & Cogeneration Analytics (ACTIVE IN UI)
+    // Page 1: Secondary View (ACTIVE IN UI)
     // -------------------------------------------------------------
     _registry.add(
       HomePageModule(
-        id: 'energy_analytics',
+        id: 'secondary_analytics',
         menuLabel: 'menu2',
-        title: 'Cogeneration & Grid Power',
-        icon: Icons.bolt_rounded,
-        builder: energyPageBuilder,
-        isVisibleInUi: true, // Visible in UI
+        title: 'Secondary View',
+        icon: Icons.insights_rounded,
+        builder: secondaryPageBuilder,
+        isVisibleInUi: true,
       ),
     );
 

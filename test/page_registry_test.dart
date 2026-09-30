@@ -6,8 +6,8 @@ void main() {
   group('HomeScreenPageRegistry Unit Tests', () {
     test('Registry initializes with exactly 2 active pages reflected in UI', () {
       HomeScreenPageRegistry.initialize(
-        telemetryPageBuilder: (context) => const SizedBox(),
-        energyPageBuilder: (context) => const SizedBox(),
+        primaryPageBuilder: (context) => const SizedBox(),
+        secondaryPageBuilder: (context) => const SizedBox(),
       );
 
       final activePages = HomeScreenPageRegistry.activePages;
@@ -15,9 +15,9 @@ void main() {
       // Assert exactly 2 active pages are reflected in the application
       expect(activePages.length, 2);
       expect(activePages[0].menuLabel, 'menu1');
-      expect(activePages[0].id, 'telemetry_overview');
+      expect(activePages[0].id, 'primary_dashboard');
       expect(activePages[1].menuLabel, 'menu2');
-      expect(activePages[1].id, 'energy_analytics');
+      expect(activePages[1].id, 'secondary_analytics');
     });
 
     test('Registry contains developer provisions for extra pages without reflecting in UI', () {

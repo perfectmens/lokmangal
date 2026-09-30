@@ -17,7 +17,7 @@ class NeumorphicBottomNav extends StatelessWidget {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 18.0, left: 16.0, right: 16.0),
+        padding: const EdgeInsets.only(bottom: 18.0, left: 24.0, right: 24.0),
         child: Container(
           height: 64,
           decoration: BoxDecoration(
@@ -29,10 +29,9 @@ class NeumorphicBottomNav extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _buildNavItem(0, Icons.home_rounded, 'Home'),
-              _buildNavItem(1, Icons.precision_manufacturing_rounded, 'Process'),
-              _buildNavItem(2, Icons.factory_rounded, 'Production'),
-              _buildNavItem(3, Icons.bolt_rounded, 'Energy'),
-              _buildNavItem(4, Icons.notifications_active_rounded, 'Alarms'),
+              _buildNavItem(1, Icons.explore_rounded, 'Explore'),
+              _buildNavItem(2, Icons.notifications_rounded, 'Notifications'),
+              _buildNavItem(3, Icons.settings_rounded, 'Settings'),
             ],
           ),
         ),

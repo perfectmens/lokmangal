@@ -8,11 +8,6 @@ import 'features/app_update/repositories/app_update_repository_impl.dart';
 import 'features/app_update/services/update_api_service.dart';
 import 'features/app_update/viewmodels/app_update_viewmodel.dart';
 import 'features/home/views/home_screen.dart';
-import 'features/plant/repositories/plant_repository.dart';
-import 'features/plant/services/plant_api_service.dart';
-import 'features/plant/viewmodels/plant_viewmodel.dart';
-import 'features/telemetry/repositories/telemetry_repository.dart';
-import 'features/telemetry/viewmodels/telemetry_viewmodel.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,14 +25,9 @@ void main() async {
   // Initialize Core Services and Repositories
   final updateApiService = UpdateApiService();
   final updateRepository = AppUpdateRepositoryImpl(apiService: updateApiService);
-  final telemetryRepository = TelemetryRepositoryImpl();
-  final plantApiService = PlantApiService();
-  final plantRepository = PlantRepositoryImpl(apiService: plantApiService);
 
   // Initialize ViewModels
   final updateViewModel = AppUpdateViewModel(repository: updateRepository);
-  final telemetryViewModel = TelemetryViewModel(repository: telemetryRepository);
-  final plantViewModel = PlantViewModel(repository: plantRepository);
 
   // Trigger background initialization & auto-scan for updates
   await updateViewModel.initialize();
@@ -46,8 +36,6 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: updateViewModel),
-        ChangeNotifierProvider.value(value: telemetryViewModel),
-        ChangeNotifierProvider.value(value: plantViewModel),
       ],
       child: const AuralissApp(),
     ),

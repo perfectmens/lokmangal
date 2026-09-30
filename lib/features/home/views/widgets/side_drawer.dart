@@ -81,17 +81,17 @@ class SideDrawer extends StatelessWidget {
                 child: Column(
                   children: [
                     // Primary Navigation
-                    _buildDrawerItem(0, Icons.home_rounded, 'Home Dashboard', context),
-                    _buildDrawerItem(1, Icons.precision_manufacturing_rounded, 'Powder Making Process', context),
-                    _buildDrawerItem(2, Icons.factory_rounded, 'Production Targets', context),
-                    _buildDrawerItem(3, Icons.bolt_rounded, 'Energy Analytics', context),
-                    _buildDrawerItem(4, Icons.notifications_active_rounded, 'Plant Alarms', context),
+                    _buildDrawerItem(0, Icons.home_rounded, 'Home', context),
+                    _buildDrawerItem(1, Icons.explore_rounded, 'Explore', context),
+                    _buildDrawerItem(2, Icons.favorite_rounded, 'Favorites', context),
+                    _buildDrawerItem(3, Icons.notifications_rounded, 'Notifications', context),
+                    _buildDrawerItem(4, Icons.list_alt_rounded, 'My Activity', context),
 
                     const Divider(height: 24, indent: 20, endIndent: 20),
 
                     // Utility & Settings Group
-                    _buildDrawerItem(5, Icons.settings_rounded, 'Settings & Simulation Host', context),
-                    _buildDrawerItem(6, Icons.help_outline_rounded, 'Help & SCADA Specs', context),
+                    _buildDrawerItem(5, Icons.settings_rounded, 'Settings & Updates', context),
+                    _buildDrawerItem(6, Icons.help_outline_rounded, 'Help & Support', context),
                     _buildDrawerItem(7, Icons.info_outline_rounded, 'About Auraliss', context),
 
                     const SizedBox(height: 32),
