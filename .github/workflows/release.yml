@@ -90,6 +90,23 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
+      - name: Set up Python for API Governance Validation
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install Python YAML Dependency
+        run: pip install pyyaml
+
+      - name: Validate API Governance Mapping
+        run: python scripts/validate-api-mapping.py
+
+      - name: Run Static Analysis & Lints
+        run: flutter analyze
+
+      - name: Run Unit & Widget Tests
+        run: flutter test
+
       - name: Assemble Release APK
         env:
           KEYSTORE_PATH: ${{ steps.keystore.outputs.keystore_path }}
