@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../viewmodels/telemetry_viewmodel.dart';
-import 'widgets/electricity_quota_card.dart';
+import 'widgets/electricity_line_graph_card.dart';
 import 'widgets/plant_capacity_card.dart';
+import 'widgets/shift_history_bar_chart_card.dart';
 
 class ExecutivePage extends StatelessWidget {
   const ExecutivePage({super.key});
@@ -29,9 +30,16 @@ class ExecutivePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // 1. Plant capacity KPIs
             PlantCapacityCard(data: telemetry.production),
             const SizedBox(height: 16),
-            ElectricityQuotaCard(data: telemetry.electricity),
+
+            // 2. Shift-wise horizontal bar chart (backend-owned data)
+            ShiftHistoryBarChartCard(shifts: telemetry.shiftHistory),
+            const SizedBox(height: 16),
+
+            // 3. Electricity line graph (backend-owned hourly trend)
+            ElectricityLineGraphCard(data: telemetry.electricity),
           ],
         ),
       ),

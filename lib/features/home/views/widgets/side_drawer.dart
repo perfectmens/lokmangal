@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_shadows.dart';
 
-class SideDrawer extends StatelessWidget {
+class SideDrawer extends StatefulWidget {
   final int selectedPageIndex;
   final ValueChanged<int> onSelectPage;
   final VoidCallback onOpenSettings;
@@ -13,6 +14,21 @@ class SideDrawer extends StatelessWidget {
     required this.onSelectPage,
     required this.onOpenSettings,
   });
+
+  @override
+  State<SideDrawer> createState() => _SideDrawerState();
+}
+
+class _SideDrawerState extends State<SideDrawer> {
+  String _version = '...';
+
+  @override
+  void initState() {
+    super.initState();
+    PackageInfo.fromPlatform().then((info) {
+      if (mounted) setState(() => _version = 'v${info.version} (Build ${info.buildNumber})');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,29 +93,29 @@ class SideDrawer extends StatelessWidget {
                 physics: const BouncingScrollPhysics(),
                 padding: const EdgeInsets.symmetric(vertical: 12.0),
                 children: [
-                  // Operations Floor View (Slide 0)
+                  // Executive C-Suite View (Slide 0 — PRIMARY)
                   _buildDrawerItem(
                     index: 0,
-                    icon: Icons.precision_manufacturing_rounded,
-                    title: 'Operations (Floor)',
-                    subtitle: 'Powder Maker, Silos & Load Cells',
-                    isSelected: selectedPageIndex == 0,
+                    icon: Icons.insights_rounded,
+                    title: 'Executive (C-Suite)',
+                    subtitle: '20 TPD Capacity, Energy & Shift History',
+                    isSelected: widget.selectedPageIndex == 0,
                     onTap: () {
                       Navigator.pop(context);
-                      onSelectPage(0);
+                      widget.onSelectPage(0);
                     },
                   ),
 
-                  // Executive C-Suite View (Slide 1)
+                  // Operations Floor View (Slide 1)
                   _buildDrawerItem(
                     index: 1,
-                    icon: Icons.insights_rounded,
-                    title: 'Executive (C-Suite)',
-                    subtitle: '20 TPD Capacity & Energy Quotas',
-                    isSelected: selectedPageIndex == 1,
+                    icon: Icons.precision_manufacturing_rounded,
+                    title: 'Operations (Floor)',
+                    subtitle: 'Powder Maker, Silos & Production Pace',
+                    isSelected: widget.selectedPageIndex == 1,
                     onTap: () {
                       Navigator.pop(context);
-                      onSelectPage(1);
+                      widget.onSelectPage(1);
                     },
                   ),
 
@@ -117,7 +133,7 @@ class SideDrawer extends StatelessWidget {
                     isHighlight: true,
                     onTap: () {
                       Navigator.pop(context);
-                      onOpenSettings();
+                      widget.onOpenSettings();
                     },
                   ),
                 ],
@@ -151,9 +167,9 @@ class SideDrawer extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const Text(
-                    'v0.0.3 (Build 3)',
-                    style: TextStyle(
+                  Text(
+                    _version,
+                    style: const TextStyle(
                       fontSize: 11.5,
                       fontWeight: FontWeight.bold,
                       color: AppColors.textMuted,

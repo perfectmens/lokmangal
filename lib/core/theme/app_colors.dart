@@ -2,35 +2,34 @@ import 'package:flutter/material.dart';
 
 /// Design tokens for the Dual-Tone Neumorphic UI Design System
 /// Foundation: ~90% Neutral White/Off-White
-/// Intent / Action Accent: ~5% Light Orange (Soft, Warm, Non-heavy)
-/// State / Positive Accent: ~3% Light Teal (Gentle Sage/Mint, Calm)
+/// Teal & Orange are ultra-light pastels — heavily white-mixed
 class AppColors {
   // Foundation (90%)
-  static const Color background = Color(0xFFF6F6F7);
-  static const Color surface = Color(0xFFFFFFFF);
+  static const Color background  = Color(0xFFF4F5F7);
+  static const Color surface     = Color(0xFFFFFFFF);
   static const Color surfaceElevated = Color(0xFFFAFAFB);
-  static const Color textPrimary = Color(0xFF0F172A);
-  static const Color textSecondary = Color(0xFF334155);
-  static const Color textMuted = Color(0xFF94A3B8);
-  static const Color borderLight = Color(0xFFE2E8F0);
-  static const Color divider = Color(0xFFE2E8F0);
+  static const Color textPrimary   = Color(0xFF1A202C);
+  static const Color textSecondary = Color(0xFF4A5568);
+  static const Color textMuted     = Color(0xFFA0AEC0);
+  static const Color borderLight   = Color(0xFFE2E8F0);
+  static const Color divider       = Color(0xFFEDF2F7);
 
-  // Intent Accents (Light Warm Orange)
-  static const Color orange = Color(0xFFF59E42); // Light refined warm orange
-  static const Color orangeSoft = Color(0xFFFBBF7E);
-  static const Color orangeLight = Color(0xFFFFF7ED);
+  // Intent Accents — Ultra-light Warm Peach-Orange (heavily white-mixed)
+  static const Color orange      = Color(0xFFE8A87C); // Washed warm peach
+  static const Color orangeSoft  = Color(0xFFF0C9A8);
+  static const Color orangeLight = Color(0xFFFDF5EE); // Near-white orange tint
 
-  // State Accents (Light Gentle Teal)
-  static const Color teal = Color(0xFF38B2AC); // Light gentle eucalyptus teal
-  static const Color tealSoft = Color(0xFF6ED4CB);
-  static const Color tealLight = Color(0xFFEBF8F6);
+  // State Accents — Ultra-light Sage Teal (heavily white-mixed)
+  static const Color teal        = Color(0xFF76B7B2); // Washed sage teal
+  static const Color tealSoft    = Color(0xFFA8D5D1);
+  static const Color tealLight   = Color(0xFFEFF8F7); // Near-white teal tint
 
-  // Supporting Informational
-  static const Color blueMuted = Color(0xFF64748B);
-  static const Color cyan = Color(0xFF6ED4CB);
+  // Supporting
+  static const Color blueMuted = Color(0xFF718096);
+  static const Color cyan      = Color(0xFF9ECFCB);
 
-  // Status Colors (Adhering to Dual-Tone semantics)
+  // Status Colors
   static const Color success = teal;
   static const Color warning = orange;
-  static const Color error = Color(0xFFE11D48);
+  static const Color error   = Color(0xFFFC8181); // Soft rose-red
 }

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../viewmodels/telemetry_viewmodel.dart';
 import 'widgets/hourly_pacing_card.dart';
+import 'widgets/hourly_production_line_graph_card.dart';
 import 'widgets/operations_header_banner.dart';
 import 'widgets/powder_maker_card.dart';
 import 'widgets/storage_inventory_card.dart';
@@ -42,6 +43,12 @@ class OperationsPage extends StatelessWidget {
             StorageInventoryCard(data: telemetry.storage),
             const SizedBox(height: 16),
             HourlyPacingCard(data: telemetry.production),
+            const SizedBox(height: 16),
+            // 8-hour shift window production line graph (backend-owned data)
+            HourlyProductionLineGraphCard(
+              data: telemetry.hourlyProductionHistory,
+              production: telemetry.production,
+            ),
           ],
         ),
       ),

@@ -52,17 +52,17 @@ class PlantSimulationState:
         self.is_online = True
 
         # Powder Maker State Machine
-        self.state_idx = 3 # Start in POWDER_MAKING
+        self.state_idx = 3  # Start in POWDER_MAKING
         self.batch_number = 128
-        self.target_batch_weight = 500.0 # kg
-        self.current_batch_weight = 370.0 # kg
-        self.state_start_time = time.time() - (27 * 60) # 27 mins elapsed
+        self.target_batch_weight = 500.0  # kg
+        self.current_batch_weight = 370.0  # kg
+        self.state_start_time = time.time() - (27 * 60)  # 27 mins elapsed
         self.target_cycle_minutes = 36.0
         self.current_rate_kg_h = 824.0
 
         # Production Totals
         self.today_kg = 15420.0
-        self.daily_target_kg = 20000.0 # 20 TPD
+        self.daily_target_kg = 20000.0  # 20 TPD
         self.shift_kg = 4060.0
         self.shift_target_kg = 6667.0
         self.hourly_target_kg_h = 833.0
@@ -71,7 +71,7 @@ class PlantSimulationState:
         # Storage & Load Cells
         self.silo_1_kg = 1910.0
         self.silo_2_kg = 1910.0
-        self.silo_capacity_kg = 5000.0
+        self.silo_capacity_kg = 5000.0  # per silo
         self.syrup_tank_kg = 2940.0
         self.syrup_capacity_kg = 5000.0
 
@@ -83,6 +83,51 @@ class PlantSimulationState:
         self.shift_limit_kwh = 1074.0
         self.daily_kwh = 2486.0
         self.daily_limit_kwh = 3221.0
+
+        # ----------------------------------------------------------------
+        # BACKEND-OWNED: Hourly kWh trend (last 8 hours of the shift)
+        # Backend decides which hours to include and their values.
+        # Flutter renders this as-is — no frontend logic.
+        # ----------------------------------------------------------------
+        self.hourly_kwh_history: List[Dict[str, Any]] = [
+            {"hour": "08:00", "kwh": 98.0},
+            {"hour": "09:00", "kwh": 101.5},
+            {"hour": "10:00", "kwh": 105.2},
+            {"hour": "11:00", "kwh": 99.8},
+            {"hour": "12:00", "kwh": 107.4},
+            {"hour": "13:00", "kwh": 102.1},
+            {"hour": "14:00", "kwh": 103.0},
+        ]
+
+        # ----------------------------------------------------------------
+        # BACKEND-OWNED: Hourly production output for current shift window
+        # 8 slots (one per hour), backend fills completed hours.
+        # Flutter renders target line vs actual — no frontend math.
+        # ----------------------------------------------------------------
+        self.hourly_production_history: List[Dict[str, Any]] = [
+            {"hour": "08:00", "actual_kg": 818.0, "target_kg": 833.0},
+            {"hour": "09:00", "actual_kg": 841.0, "target_kg": 833.0},
+            {"hour": "10:00", "actual_kg": 829.0, "target_kg": 833.0},
+            {"hour": "11:00", "actual_kg": 835.0, "target_kg": 833.0},
+            {"hour": "12:00", "actual_kg": 822.0, "target_kg": 833.0},
+            {"hour": "13:00", "actual_kg": 824.0, "target_kg": 833.0},
+            {"hour": "14:00", "actual_kg": round(self.current_rate_kg_h, 1), "target_kg": 833.0},
+        ]
+
+        # ----------------------------------------------------------------
+        # BACKEND-OWNED: Shift-wise history (last 7 shifts)
+        # Teal = historical completed shifts. Orange = current live shift.
+        # Backend tags each entry with is_current. Flutter only renders.
+        # ----------------------------------------------------------------
+        self.shift_history: List[Dict[str, Any]] = [
+            {"shift_label": "S1 - Day1", "shift_no": 1, "actual_kg": 6820.0, "target_kg": 6667.0, "is_current": False},
+            {"shift_label": "S2 - Day1", "shift_no": 2, "actual_kg": 6540.0, "target_kg": 6667.0, "is_current": False},
+            {"shift_label": "S3 - Day1", "shift_no": 3, "actual_kg": 6410.0, "target_kg": 6667.0, "is_current": False},
+            {"shift_label": "S1 - Day2", "shift_no": 4, "actual_kg": 6730.0, "target_kg": 6667.0, "is_current": False},
+            {"shift_label": "S2 - Day2", "shift_no": 5, "actual_kg": 6290.0, "target_kg": 6667.0, "is_current": False},
+            {"shift_label": "S3 - Day2", "shift_no": 6, "actual_kg": 6600.0, "target_kg": 6667.0, "is_current": False},
+            {"shift_label": "S1 - Day3", "shift_no": 7, "actual_kg": round(self.shift_kg, 1), "target_kg": 6667.0, "is_current": True},
+        ]
 
         # Revolving Events Ticker
         self.events = [
@@ -144,13 +189,27 @@ class PlantSimulationState:
             {"batchId": "B-125", "batchNumber": 125, "weightKg": 501.0, "targetWeightKg": 500.0, "startTime": "11:32", "endTime": "12:07", "durationMinutes": 35.0, "status": "COMPLETED"},
         ]
 
+    def get_active_silo(self) -> int:
+        """Backend decides which silo is active. Flutter must not recompute this."""
+        return 1 if self.silo_1_kg < self.silo_capacity_kg else 2
+
     def tick(self):
         """Advances plant simulation with sensor fluctuations and state transitions."""
         # Minor fluctuations
         self.live_power_kw = round(103.0 + random.uniform(-2.5, 3.5), 1)
-        self.silo_1_kg = round(self.silo_1_kg + random.uniform(-1.0, 1.5), 1)
-        self.silo_2_kg = round(self.silo_2_kg + random.uniform(-1.0, 1.5), 1)
+        # Alternating silo fill: backend controls which silo receives new output
+        if self.silo_1_kg < self.silo_capacity_kg:
+            self.silo_1_kg = round(min(self.silo_capacity_kg, self.silo_1_kg + random.uniform(0.0, 1.5)), 1)
+        else:
+            self.silo_2_kg = round(min(self.silo_capacity_kg, self.silo_2_kg + random.uniform(0.0, 1.5)), 1)
         self.syrup_tank_kg = round(2940.0 + random.uniform(-2.0, 2.0), 1)
+        # Update latest hour in hourly histories
+        self.hourly_kwh_history[-1]["kwh"] = round(self.live_power_kw, 1)
+        self.hourly_production_history[-1]["actual_kg"] = round(self.current_rate_kg_h, 1)
+        # Update current shift in shift history
+        for s in self.shift_history:
+            if s["is_current"]:
+                s["actual_kg"] = round(self.shift_kg, 1)
 
         # In POWDER_MAKING state, increment batch weight gradually
         current_state_info = POWDER_MAKER_STATES[self.state_idx]
@@ -278,13 +337,14 @@ async def get_live_telemetry():
             "completed_batches_today": max(1, sim.batch_number - 110)
         },
         "storage": {
-            "silo_1_kg": round(sim.silo_1_kg, 1),
-            "silo_2_kg": round(sim.silo_2_kg, 1),
-            "combined_silos_kg": round(sim.silo_1_kg + sim.silo_2_kg, 1),
-            "combined_max_capacity_kg": sim.silo_capacity_kg,
+            "number_of_silos": 2,
+            "silo_max_kg": sim.silo_capacity_kg,
+            "silo1_kg": round(sim.silo_1_kg, 1),
+            "silo2_kg": round(sim.silo_2_kg, 1),
+            # Backend decision: which silo is active — Flutter must NOT recompute
+            "active_silo": sim.get_active_silo(),
             "syrup_tank_kg": round(sim.syrup_tank_kg, 1),
-            "syrup_tank_max_kg": sim.syrup_capacity_kg,
-            "load_cells_healthy": True
+            "syrup_tank_max_kg": sim.syrup_capacity_kg
         },
         "electricity": {
             "current_power_kw": round(sim.live_power_kw, 1),
@@ -294,8 +354,14 @@ async def get_live_telemetry():
             "shift_max_kwh": sim.shift_limit_kwh,
             "daily_kwh": round(sim.daily_kwh, 1),
             "daily_max_kwh": sim.daily_limit_kwh,
-            "sec_kwh_per_kg": sec_kwh_per_kg
-        }
+            "sec_kwh_per_kg": sec_kwh_per_kg,
+            # Backend-computed hourly kWh trend for current shift
+            "hourly_kwh_history": sim.hourly_kwh_history
+        },
+        # Backend-owned shift-wise history — Flutter renders only
+        "shift_history": sim.shift_history,
+        # Backend-owned hourly production window — Flutter renders only
+        "hourly_production_history": sim.hourly_production_history
     }
 
 @app.get("/api/v1/plant/status")

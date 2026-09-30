@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class AppShadows {
-  /// Standard Raised Tactile Card Shadow
+  /// Standard Raised Tactile Card Shadow — stronger neumorphism
   static List<BoxShadow> raised({
-    double blur = 14.0,
+    double blur = 18.0,
     double spread = 1.0,
-    Offset offset = const Offset(6, 6),
-    double darkOpacity = 0.08,
+    Offset offset = const Offset(7, 7),
+    double darkOpacity = 0.13,
   }) => [
     BoxShadow(
       color: Color.fromRGBO(10, 13, 47, darkOpacity),
@@ -14,47 +14,44 @@ class AppShadows {
       blurRadius: blur,
       spreadRadius: spread,
     ),
-    BoxShadow(
+    const BoxShadow(
       color: Colors.white,
-      offset: Offset(-offset.dx, -offset.dy),
-      blurRadius: blur,
-      spreadRadius: spread,
+      offset: Offset(-7, -7),
+      blurRadius: 18,
+      spreadRadius: 1,
     ),
   ];
 
   /// Floating Dock Shadow (High elevation)
   static List<BoxShadow> dock() => const [
     BoxShadow(
-      color: Color(0x1A0A0D2F),
+      color: Color(0x220A0D2F),
       offset: Offset(10, 10),
-      blurRadius: 20,
+      blurRadius: 24,
       spreadRadius: 2,
     ),
     BoxShadow(
       color: Colors.white,
       offset: Offset(-10, -10),
-      blurRadius: 20,
+      blurRadius: 24,
       spreadRadius: 2,
     ),
   ];
 
   /// Subtle Pill / Button Shadow
   static List<BoxShadow> pill({bool isSelected = false}) {
-    if (isSelected) {
-      // Recessed / Inset look
-      return [];
-    }
+    if (isSelected) return [];
     return const [
       BoxShadow(
-        color: Color(0x100A0D2F),
-        offset: Offset(3, 3),
-        blurRadius: 6,
+        color: Color(0x150A0D2F),
+        offset: Offset(4, 4),
+        blurRadius: 8,
         spreadRadius: 0.5,
       ),
       BoxShadow(
         color: Colors.white,
-        offset: Offset(-3, -3),
-        blurRadius: 6,
+        offset: Offset(-4, -4),
+        blurRadius: 8,
         spreadRadius: 0.5,
       ),
     ];
@@ -63,15 +60,15 @@ class AppShadows {
   /// Small Icon / Control Button Shadow
   static List<BoxShadow> circularButton() => const [
     BoxShadow(
-      color: Color(0x150A0D2F),
-      offset: Offset(4, 4),
-      blurRadius: 8,
+      color: Color(0x1A0A0D2F),
+      offset: Offset(5, 5),
+      blurRadius: 10,
       spreadRadius: 1,
     ),
     BoxShadow(
       color: Colors.white,
-      offset: Offset(-4, -4),
-      blurRadius: 8,
+      offset: Offset(-5, -5),
+      blurRadius: 10,
       spreadRadius: 1,
     ),
   ];
@@ -79,17 +76,17 @@ class AppShadows {
   /// Standard Neumorphic Card Shadow
   static List<BoxShadow> card() => raised();
 
-  /// Recessed Neumorphic Shadow
+  /// Recessed / Inset Shadow (for progress bars, text fields)
   static List<BoxShadow> recessed() => const [
     BoxShadow(
-      color: Color(0x0C0A0D2F),
-      offset: Offset(2, 2),
-      blurRadius: 4,
+      color: Color(0x140A0D2F),
+      offset: Offset(3, 3),
+      blurRadius: 6,
     ),
     BoxShadow(
       color: Colors.white,
-      offset: Offset(-2, -2),
-      blurRadius: 4,
+      offset: Offset(-3, -3),
+      blurRadius: 6,
     ),
   ];
 

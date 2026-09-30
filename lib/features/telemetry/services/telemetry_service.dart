@@ -127,13 +127,14 @@ class TelemetryService {
       storage: StorageMetrics(
         numberOfSilos: 2,
         siloMaxKg: 5000.0,
-        // Alternating silo logic: Silo 1 fills first; when full, Silo 2 takes over
         silo1Kg: prev.storage.silo1Kg < 5000.0
             ? double.parse((prev.storage.silo1Kg + 0.2).clamp(0.0, 5000.0).toStringAsFixed(1))
             : 5000.0,
         silo2Kg: prev.storage.silo1Kg >= 5000.0
             ? double.parse((prev.storage.silo2Kg + 0.2).clamp(0.0, 5000.0).toStringAsFixed(1))
             : prev.storage.silo2Kg,
+        // Local simulation fallback: backend owns this in real usage
+        activeSilo: prev.storage.silo1Kg < 5000.0 ? 1 : 2,
         syrupTankMaxKg: 5000.0,
         syrupTankKg: double.parse((prev.storage.syrupTankKg - 0.1).clamp(0.0, 5000.0).toStringAsFixed(1)),
       ),

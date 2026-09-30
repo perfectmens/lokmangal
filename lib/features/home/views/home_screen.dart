@@ -26,8 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-
-    // Initialize developer page registry with Operations and Executive slides
+    // Executive is primary (index 0), Operations is secondary (index 1)
     HomeScreenPageRegistry.initialize(
       operationsPageBuilder: (context) => const OperationsPage(),
       executivePageBuilder: (context) => const ExecutivePage(),
@@ -136,15 +135,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Stack(
       children: [
-        // 2-Slide PageView (Operations & Executive)
-        PageView.builder(
-          controller: _pageController,
-          onPageChanged: _onPageChanged,
-          physics: const BouncingScrollPhysics(),
-          itemCount: activePages.length,
-          itemBuilder: (context, index) {
-            return activePages[index].builder(context);
+        // Swipe right from left edge to open drawer
+        GestureDetector(
+          onHorizontalDragEnd: (details) {
+            if (details.primaryVelocity != null && details.primaryVelocity! > 200) {
+              _scaffoldKey.currentState?.openDrawer();
+            }
           },
+          child: PageView.builder(
+            controller: _pageController,
+            onPageChanged: _onPageChanged,
+            physics: const BouncingScrollPhysics(),
+            itemCount: activePages.length,
+            itemBuilder: (context, index) {
+              return activePages[index].builder(context);
+            },
+          ),
         ),
 
         // Floating Top Neumorphic Dock

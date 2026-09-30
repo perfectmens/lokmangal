@@ -135,29 +135,15 @@ class TopFloatingDock extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: onLogoTap,
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          height: 48,
-                          width: 48,
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            color: AppColors.surface,
-                            shape: BoxShape.circle,
-                            boxShadow: selectedPageIndex == 0
-                                ? []
-                                : AppShadows.circularButton(),
-                          ),
-                          child: ClipOval(
-                            child: Image.asset(
-                              'assets/auraliss_logo.png',
-                              width: 40,
-                              height: 40,
-                              errorBuilder: (_, _, _) => const Icon(
-                                Icons.factory_rounded,
-                                color: AppColors.teal,
-                                size: 24,
-                              ),
-                            ),
+                        child: Image.asset(
+                          'assets/logo.png',
+                          height: 44,
+                          width: 44,
+                          fit: BoxFit.contain,
+                          errorBuilder: (_, _, _) => const Icon(
+                            Icons.factory_rounded,
+                            color: AppColors.teal,
+                            size: 28,
                           ),
                         ),
                       ),
