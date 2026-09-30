@@ -117,3 +117,30 @@ apis:
         downloadUrl: "string"
     consumers:
       - "mobile.settings.docker_backend"
+
+  # ============================================================================
+  # CORELIFE INDUSTRIAL TELEMETRY
+  # ============================================================================
+  - id: "plant.telemetry.live"
+    domain: "telemetry"
+    action: "get_live_telemetry"
+    path: "/api/v1/telemetry/live"
+    method: "GET"
+    purpose: "Streams real-time industrial plant telemetry for Powder Maker, Storage Silos, and Energy limits"
+    status: "active"
+    auth:
+      required: false
+    response:
+      status: 200
+      type: "object"
+      schema:
+        timestamp: "string"
+        plant: "object"
+        production: "object"
+        powder_maker: "object"
+        storage: "object"
+        electricity: "object"
+    consumers:
+      - "mobile.telemetry.operations"
+      - "mobile.telemetry.executive"
+

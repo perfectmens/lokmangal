@@ -3,13 +3,15 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_shadows.dart';
 
 class SideDrawer extends StatelessWidget {
-  final int selectedDrawerIndex;
-  final ValueChanged<int> onSelectDrawerIndex;
+  final int selectedPageIndex;
+  final ValueChanged<int> onSelectPage;
+  final VoidCallback onOpenSettings;
 
   const SideDrawer({
     super.key,
-    required this.selectedDrawerIndex,
-    required this.onSelectDrawerIndex,
+    required this.selectedPageIndex,
+    required this.onSelectPage,
+    required this.onOpenSettings,
   });
 
   @override
@@ -19,90 +21,145 @@ class SideDrawer extends StatelessWidget {
       child: SafeArea(
         child: Column(
           children: [
-            // 1. Static Profile Header
-            GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-                onSelectDrawerIndex(8); // Dedicated Profile Page
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  children: [
-                    Container(
-                      height: 56,
-                      width: 56,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.surface,
-                        boxShadow: AppShadows.circularButton(),
-                      ),
-                      child: const Icon(
-                        Icons.person_rounded,
-                        color: AppColors.textMuted,
-                        size: 30,
-                      ),
+            // 1. Plant & Operator Identity Header
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Row(
+                children: [
+                  Container(
+                    height: 52,
+                    width: 52,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.surface,
+                      boxShadow: AppShadows.circularButton(),
                     ),
-                    const SizedBox(width: 14),
-                    const Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Corelife Operator',
-                            style: TextStyle(
-                              color: AppColors.textPrimary,
-                              fontSize: 17,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          SizedBox(height: 2),
-                          Text(
-                            'operator@corelife.com',
-                            style: TextStyle(
-                              color: AppColors.textMuted,
-                              fontSize: 13,
-                            ),
-                          ),
-                        ],
-                      ),
+                    child: const Icon(
+                      Icons.factory_rounded,
+                      color: AppColors.teal,
+                      size: 26,
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(width: 14),
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Corelife Wholefoods',
+                          style: TextStyle(
+                            color: AppColors.textPrimary,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: -0.2,
+                          ),
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                          'Operator ID: OP-4029',
+                          style: TextStyle(
+                            color: AppColors.textMuted,
+                            fontSize: 12.5,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
             const Divider(height: 1, indent: 20, endIndent: 20),
 
-            // 2. Scrollable Navigation Groups
+            // 2. Tailored Navigation Items
             Expanded(
-              child: SingleChildScrollView(
+              child: ListView(
                 physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Column(
-                  children: [
-                    // Primary Navigation
-                    _buildDrawerItem(0, Icons.home_rounded, 'Home', context),
-                    _buildDrawerItem(1, Icons.explore_rounded, 'Explore', context),
-                    _buildDrawerItem(2, Icons.favorite_rounded, 'Favorites', context),
-                    _buildDrawerItem(3, Icons.notifications_rounded, 'Notifications', context),
-                    _buildDrawerItem(4, Icons.list_alt_rounded, 'My Activity', context),
+                padding: const EdgeInsets.symmetric(vertical: 12.0),
+                children: [
+                  // Operations Floor View (Slide 0)
+                  _buildDrawerItem(
+                    index: 0,
+                    icon: Icons.precision_manufacturing_rounded,
+                    title: 'Operations (Floor)',
+                    subtitle: 'Powder Maker, Silos & Load Cells',
+                    isSelected: selectedPageIndex == 0,
+                    onTap: () {
+                      Navigator.pop(context);
+                      onSelectPage(0);
+                    },
+                  ),
 
-                    const Divider(height: 24, indent: 20, endIndent: 20),
+                  // Executive C-Suite View (Slide 1)
+                  _buildDrawerItem(
+                    index: 1,
+                    icon: Icons.insights_rounded,
+                    title: 'Executive (C-Suite)',
+                    subtitle: '20 TPD Capacity & Energy Quotas',
+                    isSelected: selectedPageIndex == 1,
+                    onTap: () {
+                      Navigator.pop(context);
+                      onSelectPage(1);
+                    },
+                  ),
 
-                    // Utility & Settings Group
-                    _buildDrawerItem(5, Icons.settings_rounded, 'Settings & Updates', context),
-                    _buildDrawerItem(6, Icons.help_outline_rounded, 'Help & Support', context),
-                    _buildDrawerItem(7, Icons.info_outline_rounded, 'About Auraliss', context),
+                  const SizedBox(height: 12),
+                  const Divider(height: 1, indent: 20, endIndent: 20),
+                  const SizedBox(height: 12),
 
-                    const SizedBox(height: 32),
-                    const Divider(height: 24, indent: 20, endIndent: 20),
+                  // Settings & Updates
+                  _buildDrawerItem(
+                    index: -1,
+                    icon: Icons.system_update_rounded,
+                    title: 'Settings & Updates',
+                    subtitle: 'OTA Engine & Server Configuration',
+                    isSelected: false,
+                    isHighlight: true,
+                    onTap: () {
+                      Navigator.pop(context);
+                      onOpenSettings();
+                    },
+                  ),
+                ],
+              ),
+            ),
 
-                    // Special Actions (Dual-Tone Orange Intent Semantics)
-                    _buildDrawerItem(-2, Icons.swap_horiz_rounded, 'Switch to C-Suite View', context, isSpecial: true),
-                    _buildDrawerItem(-1, Icons.logout_rounded, 'Log Out', context, isIntent: true),
-                    const SizedBox(height: 20),
-                  ],
-                ),
+            // 3. Minimal Clean Footer
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: 8,
+                        height: 8,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.teal,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      const Text(
+                        'Auraliss Corelife',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Text(
+                    'v0.0.3 (Build 3)',
+                    style: TextStyle(
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textMuted,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -111,85 +168,74 @@ class SideDrawer extends StatelessWidget {
     );
   }
 
-  Widget _buildDrawerItem(
-    int index,
-    IconData icon,
-    String title,
-    BuildContext context, {
-    bool isIntent = false,
-    bool isSpecial = false,
+  Widget _buildDrawerItem({
+    required int index,
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required bool isSelected,
+    required VoidCallback onTap,
+    bool isHighlight = false,
   }) {
-    final bool isSelected = selectedDrawerIndex == index;
-
-    Color iconColor = AppColors.textMuted;
-    Color textColor = AppColors.textSecondary;
-
-    if (isSelected) {
-      iconColor = AppColors.teal; // Teal active state
-      textColor = AppColors.textPrimary;
-    } else if (isIntent || isSpecial) {
-      iconColor = AppColors.orange; // Orange intent accent
-      textColor = AppColors.orange;
-    }
+    final Color iconColor = isSelected
+        ? AppColors.teal
+        : isHighlight
+            ? AppColors.orange
+            : AppColors.textMuted;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 4.0),
       child: GestureDetector(
-        onTap: () {
-          Navigator.pop(context); // Close drawer
-          if (isSpecial) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Switched to C-Suite Executive Telemetry Dashboard.'),
-                backgroundColor: AppColors.orange,
-              ),
-            );
-            return;
-          }
-          if (isIntent) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Logged out of session.'),
-                backgroundColor: AppColors.orange,
-              ),
-            );
-            return;
-          }
-          onSelectDrawerIndex(index);
-        },
+        onTap: onTap,
         child: Container(
-          decoration: isSelected
-              ? BoxDecoration(
+          padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10.0),
+          decoration: BoxDecoration(
+            color: isSelected ? AppColors.teal.withValues(alpha: 0.08) : Colors.transparent,
+            borderRadius: BorderRadius.circular(14),
+            border: isSelected
+                ? Border.all(color: AppColors.teal.withValues(alpha: 0.3), width: 1.0)
+                : null,
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
                   color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color(0x100A0D2F),
-                      offset: Offset(2, 2),
-                      blurRadius: 4,
+                  boxShadow: isSelected ? [] : AppShadows.circularButton(),
+                ),
+                child: Icon(icon, size: 18, color: iconColor),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                        color: isSelected ? AppColors.textPrimary : AppColors.textSecondary,
+                      ),
                     ),
-                    BoxShadow(
-                      color: Colors.white,
-                      offset: Offset(-2, -2),
-                      blurRadius: 4,
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: AppColors.textMuted,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
-                )
-              : BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.circular(16),
                 ),
-          child: ListTile(
-            dense: true,
-            leading: Icon(icon, color: iconColor, size: 22),
-            title: Text(
-              title,
-              style: TextStyle(
-                color: textColor,
-                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                fontSize: 14,
               ),
-            ),
+              if (isSelected)
+                const Icon(Icons.arrow_forward_ios_rounded, size: 12, color: AppColors.teal),
+            ],
           ),
         ),
       ),

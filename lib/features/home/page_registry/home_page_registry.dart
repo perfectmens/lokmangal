@@ -4,7 +4,7 @@ typedef PageBuilder = Widget Function(BuildContext context);
 
 class HomePageModule {
   final String id;
-  final String menuLabel; // e.g. 'menu1', 'menu2'
+  final String menuLabel; // e.g. 'Operations', 'Executive'
   final String title;
   final IconData icon;
   final PageBuilder builder;
@@ -32,7 +32,7 @@ class HomePageModule {
 }
 
 /// Extensible Developer Page Registry for the Home Screen.
-/// Contains exactly 2 active pages reflected in the application (Page 0 & Page 1).
+/// Contains exactly 2 active pages reflected in the application (Operations & Executive).
 /// Provides developer provisions to register additional pages (menu3, menu4, menu5, etc.)
 /// without reflecting them in the UI until explicitly enabled.
 class HomeScreenPageRegistry {
@@ -41,104 +41,104 @@ class HomeScreenPageRegistry {
   static bool _initialized = false;
 
   static void initialize({
-    required Widget Function(BuildContext) primaryPageBuilder,
-    required Widget Function(BuildContext) secondaryPageBuilder,
+    required Widget Function(BuildContext) operationsPageBuilder,
+    required Widget Function(BuildContext) executivePageBuilder,
   }) {
     if (_initialized) return;
 
     _registry.clear();
 
     // -------------------------------------------------------------
-    // Page 0: Primary View (ACTIVE IN UI)
+    // Page 0: Operations View (ACTIVE IN UI)
     // -------------------------------------------------------------
     _registry.add(
       HomePageModule(
-        id: 'primary_dashboard',
-        menuLabel: 'menu1',
-        title: 'Primary View',
-        icon: Icons.dashboard_rounded,
-        builder: primaryPageBuilder,
+        id: 'operations',
+        menuLabel: 'Operations',
+        title: 'Operations (Floor)',
+        icon: Icons.precision_manufacturing_rounded,
+        builder: operationsPageBuilder,
         isVisibleInUi: true,
       ),
     );
 
     // -------------------------------------------------------------
-    // Page 1: Secondary View (ACTIVE IN UI)
+    // Page 1: Executive View (ACTIVE IN UI)
     // -------------------------------------------------------------
     _registry.add(
       HomePageModule(
-        id: 'secondary_analytics',
-        menuLabel: 'menu2',
-        title: 'Secondary View',
+        id: 'executive',
+        menuLabel: 'Executive',
+        title: 'Executive (C-Suite)',
         icon: Icons.insights_rounded,
-        builder: secondaryPageBuilder,
+        builder: executivePageBuilder,
         isVisibleInUi: true,
       ),
     );
 
     // -------------------------------------------------------------
-    // DEVELOPER PROVISIONS (Pre-registered future expansion modules)
-    // Note: isVisibleInUi = false ensures these are NOT reflected in the application.
+    // DEVELOPER PROVISIONS: Hidden extra pages (NOT REFLECTED IN UI)
     // -------------------------------------------------------------
     _registry.add(
       HomePageModule(
-        id: 'quality_assurance',
-        menuLabel: 'menu3',
-        title: 'Brix & Purity Analytics',
-        icon: Icons.biotech_rounded,
-        builder: (ctx) => const Center(child: Text('Quality Assurance Module')),
-        isVisibleInUi: false, // Provision only - hidden from UI
+        id: 'dev_provision_batch_history',
+        menuLabel: 'History',
+        title: 'Batch History & Logs',
+        icon: Icons.history_rounded,
+        builder: (context) => const SizedBox.shrink(),
+        isVisibleInUi: false,
       ),
     );
 
     _registry.add(
       HomePageModule(
-        id: 'machine_diagnostics',
-        menuLabel: 'menu4',
-        title: 'Turbine Vibration & Health',
-        icon: Icons.build_circle_rounded,
-        builder: (ctx) => const Center(child: Text('Diagnostics Module')),
-        isVisibleInUi: false, // Provision only - hidden from UI
+        id: 'dev_provision_alarm_management',
+        menuLabel: 'Alarms',
+        title: 'Alarm Lifecycle Management',
+        icon: Icons.notifications_active_rounded,
+        builder: (context) => const SizedBox.shrink(),
+        isVisibleInUi: false,
       ),
     );
 
     _registry.add(
       HomePageModule(
-        id: 'logistics_dispatch',
-        menuLabel: 'menu5',
-        title: 'Weighbridge & Cane Logistics',
-        icon: Icons.local_shipping_rounded,
-        builder: (ctx) => const Center(child: Text('Logistics Module')),
-        isVisibleInUi: false, // Provision only - hidden from UI
+        id: 'dev_provision_diagnostics',
+        menuLabel: 'Diagnostics',
+        title: 'SCADA Diagnostics & Calibration',
+        icon: Icons.settings_input_component_rounded,
+        builder: (context) => const SizedBox.shrink(),
+        isVisibleInUi: false,
       ),
     );
 
     _initialized = true;
   }
 
-  /// Returns only pages configured to be displayed in the UI (exactly 2 pages)
+  /// Get only active pages that should be displayed in the PageView & Top Floating Dock.
   static List<HomePageModule> get activePages =>
       _registry.where((p) => p.isVisibleInUi).toList();
 
-  /// Returns all registered pages including developer provisions
-  static List<HomePageModule> get allRegisteredPages =>
-      List.unmodifiable(_registry);
+  /// Total count of active pages reflected in UI.
+  static int get activePageCount => activePages.length;
 
-  /// Developer provision API to register a new module dynamically
-  static void registerModule(HomePageModule module) {
-    final existingIdx = _registry.indexWhere((p) => p.id == module.id);
-    if (existingIdx >= 0) {
-      _registry[existingIdx] = module;
+  /// Check developer provision list (includes both active and hidden provisions).
+  static List<HomePageModule> get allProvisions => List.unmodifiable(_registry);
+
+  /// Developer provision method: dynamically enable or register a custom module.
+  static void registerCustomModule(HomePageModule module) {
+    final existingIndex = _registry.indexWhere((p) => p.id == module.id);
+    if (existingIndex >= 0) {
+      _registry[existingIndex] = module;
     } else {
       _registry.add(module);
     }
   }
 
-  /// Developer provision API to toggle module visibility
-  static void setModuleVisibility(String id, bool isVisible) {
-    final idx = _registry.indexWhere((p) => p.id == id);
-    if (idx >= 0) {
-      _registry[idx] = _registry[idx].copyWith(isVisibleInUi: isVisible);
-    }
+  /// Clear registry for testing
+  @visibleForTesting
+  static void resetForTesting() {
+    _registry.clear();
+    _initialized = false;
   }
 }

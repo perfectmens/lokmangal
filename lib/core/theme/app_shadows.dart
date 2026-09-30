@@ -92,4 +92,7 @@ class AppShadows {
       blurRadius: 4,
     ),
   ];
+
+  /// Inset Field / Bar Shadow
+  static List<BoxShadow> insetField() => recessed();
 }

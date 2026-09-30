@@ -246,6 +246,58 @@ async def on_startup():
 async def health_check():
     return {"status": "ok", "plant": sim.name, "timestamp": datetime.now(timezone.utc).isoformat()}
 
+@app.get("/api/v1/telemetry/live")
+async def get_live_telemetry():
+    pm_info = POWDER_MAKER_STATES[sim.state_idx]
+    elapsed_sec = int(time.time() - sim.state_start_time)
+    sec_kwh_per_kg = round(sim.hourly_kwh / max(1.0, sim.current_rate_kg_h), 3)
+
+    return {
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "plant": {
+            "name": sim.name,
+            "products": sim.business_units,
+            "active_product": "Jaggery Powder"
+        },
+        "production": {
+            "shift_number": sim.current_shift,
+            "shift_duration_hours": 8,
+            "shift_elapsed_seconds": 15420,
+            "hourly_target_kg": sim.hourly_target_kg_h,
+            "hourly_actual_kg": round(sim.current_rate_kg_h, 1),
+            "shift_target_kg": sim.shift_target_kg,
+            "shift_actual_kg": round(sim.shift_kg, 1),
+            "plant_capacity_tpd": 20.0,
+            "daily_actual_kg": round(sim.today_kg, 1)
+        },
+        "powder_maker": {
+            "status": pm_info["display"],
+            "batch_capacity_kg": sim.target_batch_weight,
+            "batch_current_kg": round(sim.current_batch_weight, 1),
+            "batch_cycle_seconds": elapsed_sec % 300,
+            "completed_batches_today": max(1, sim.batch_number - 110)
+        },
+        "storage": {
+            "silo_1_kg": round(sim.silo_1_kg, 1),
+            "silo_2_kg": round(sim.silo_2_kg, 1),
+            "combined_silos_kg": round(sim.silo_1_kg + sim.silo_2_kg, 1),
+            "combined_max_capacity_kg": sim.silo_capacity_kg,
+            "syrup_tank_kg": round(sim.syrup_tank_kg, 1),
+            "syrup_tank_max_kg": sim.syrup_capacity_kg,
+            "load_cells_healthy": True
+        },
+        "electricity": {
+            "current_power_kw": round(sim.live_power_kw, 1),
+            "hourly_kwh": round(sim.hourly_kwh, 1),
+            "hourly_max_kwh": sim.hourly_limit_kwh,
+            "shift_kwh": round(sim.shift_kwh, 1),
+            "shift_max_kwh": sim.shift_limit_kwh,
+            "daily_kwh": round(sim.daily_kwh, 1),
+            "daily_max_kwh": sim.daily_limit_kwh,
+            "sec_kwh_per_kg": sec_kwh_per_kg
+        }
+    }
+
 @app.get("/api/v1/plant/status")
 async def get_plant_status():
     health = sim.get_plant_health()

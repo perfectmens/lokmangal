@@ -8,6 +8,7 @@ import 'features/app_update/repositories/app_update_repository_impl.dart';
 import 'features/app_update/services/update_api_service.dart';
 import 'features/app_update/viewmodels/app_update_viewmodel.dart';
 import 'features/home/views/home_screen.dart';
+import 'features/telemetry/viewmodels/telemetry_viewmodel.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,6 +29,7 @@ void main() async {
 
   // Initialize ViewModels
   final updateViewModel = AppUpdateViewModel(repository: updateRepository);
+  final telemetryViewModel = TelemetryViewModel();
 
   // Trigger background initialization & auto-scan for updates
   await updateViewModel.initialize();
@@ -36,6 +38,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: updateViewModel),
+        ChangeNotifierProvider.value(value: telemetryViewModel),
       ],
       child: const AuralissApp(),
     ),
