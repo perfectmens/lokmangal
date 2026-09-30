@@ -1,0 +1,334 @@
+version: "1.1.0"
+project: "Auraliss - Corelife Wholefoods Industrial Telemetry Platform"
+last_updated: "2026-09-30"
+
+apis:
+  # ============================================================================
+  # APP LIFECYCLE & REMOTE UPDATE ENGINE (CI/CD TRACK)
+  # ============================================================================
+  - id: "app.release.latest"
+    domain: "app_lifecycle"
+    action: "check_latest_release"
+    path: "/repos/{owner}/{repo}/releases/latest"
+    method: "GET"
+    purpose: "Queries GitHub Releases API to discover latest published release tag, assets, and metadata"
+    status: "active"
+    auth:
+      required: false
+      type: "bearer_optional"
+      description: "Optional Bearer token for private repository access or higher rate limits"
+    parameters:
+      - name: "owner"
+        in: "path"
+        type: "string"
+        required: true
+        description: "GitHub repository owner (e.g. perfectmens)"
+      - name: "repo"
+        in: "path"
+        type: "string"
+        required: true
+        description: "GitHub repository name (e.g. lokmangal)"
+    response:
+      status: 200
+      type: "object"
+      schema:
+        tag_name: "string"
+        name: "string"
+        body: "string"
+        published_at: "string"
+        assets: "array"
+    consumers:
+      - "mobile.settings.app_update"
+      - "mobile.app_lifecycle.auto_scan"
+
+  - id: "app.release.download"
+    domain: "app_lifecycle"
+    action: "download_release_apk"
+    path: "/repos/{owner}/{repo}/releases/assets/{asset_id}"
+    method: "GET"
+    purpose: "Streams application APK binary for in-app remote update installation"
+    status: "active"
+    auth:
+      required: false
+      type: "bearer_optional"
+      description: "Required Bearer token when downloading from private repositories"
+    headers:
+      Accept: "application/octet-stream"
+    parameters:
+      - name: "owner"
+        in: "path"
+        type: "string"
+        required: true
+      - name: "repo"
+        in: "path"
+        type: "string"
+        required: true
+      - name: "asset_id"
+        in: "path"
+        type: "integer"
+        required: true
+    response:
+      status: 200
+      type: "binary"
+      content_type: "application/vnd.android.package-archive"
+    consumers:
+      - "mobile.settings.app_update.downloader"
+
+  - id: "app.release.manifest"
+    domain: "app_lifecycle"
+    action: "fetch_version_manifest"
+    path: "/repos/{owner}/{repo}/releases/download/{tag}/version.json"
+    method: "GET"
+    purpose: "Retrieves authoritative version.json containing versionCode, sha256 checksum, and signature fingerprint"
+    status: "active"
+    auth:
+      required: false
+    response:
+      status: 200
+      type: "object"
+      schema:
+        versionCode: "integer"
+        versionName: "string"
+        downloadUrl: "string"
+        sha256: "string"
+        certificateFingerprint: "string"
+        releaseNotes: "string"
+    consumers:
+      - "mobile.settings.app_update.verifier"
+
+  # ============================================================================
+  # PLANT SHELL & CONNECTIVITY (CORELIFE WHOLEFOODS)
+  # ============================================================================
+  - id: "plant.status.load"
+    domain: "plant"
+    action: "load_plant_status"
+    path: "/api/v1/plant/status"
+    method: "GET"
+    purpose: "Returns plant identity, live connection state, overall plant health, and weighted operational breakdown"
+    status: "active"
+    auth:
+      required: false
+    response:
+      status: 200
+      type: "object"
+      schema:
+        plantId: "string"
+        name: "string"
+        location: "string"
+        businessUnits: "array"
+        connectionStatus: "string"
+        healthScore: "number"
+        healthBreakdown: "object"
+    consumers:
+      - "mobile.home.factory_header"
+      - "mobile.shell.connection_manager"
+
+  # ============================================================================
+  # REVOLVING EVENT TICKER (LIVE OPERATIONAL NARRATIVE)
+  # ============================================================================
+  - id: "telemetry.events.load"
+    domain: "telemetry"
+    action: "load_plant_events"
+    path: "/api/v1/telemetry/events"
+    method: "GET"
+    purpose: "Fetches live prioritized events stream for the revolving LivePlantEventTicker"
+    status: "active"
+    auth:
+      required: false
+    response:
+      status: 200
+      type: "array"
+      schema:
+        id: "string"
+        message: "string"
+        category: "string"
+        priority: "integer"
+        timestamp: "string"
+    consumers:
+      - "mobile.home.event_ticker"
+
+  # ============================================================================
+  # PRODUCTION CALCULATION ENGINE
+  # ============================================================================
+  - id: "production.summary.load"
+    domain: "production"
+    action: "load_production_summary"
+    path: "/api/v1/production/summary"
+    method: "GET"
+    purpose: "Authoritative server calculations for daily production, hourly rate, shift production, and target gaps"
+    status: "active"
+    auth:
+      required: false
+    response:
+      status: 200
+      type: "object"
+      schema:
+        todayKg: "number"
+        dailyTargetKg: "number"
+        dailyTargetPercent: "number"
+        hourlyRateKgH: "number"
+        hourlyTargetKgH: "number"
+        shiftKg: "number"
+        shiftTargetKg: "number"
+        energyKwh: "number"
+        energyBudgetKwh: "number"
+        currentShift: "integer"
+    consumers:
+      - "mobile.home.production_kpi_grid"
+      - "mobile.production.dashboard"
+
+  - id: "production.batches.load"
+    domain: "production"
+    action: "load_production_batches"
+    path: "/api/v1/production/batches"
+    method: "GET"
+    purpose: "Retrieves list of active and completed production batches with weight, cycle time, and status"
+    status: "active"
+    auth:
+      required: false
+    response:
+      status: 200
+      type: "array"
+      schema:
+        batchId: "string"
+        batchNumber: "integer"
+        weightKg: "number"
+        targetWeightKg: "number"
+        startTime: "string"
+        endTime: "string"
+        durationMinutes: "number"
+        status: "string"
+    consumers:
+      - "mobile.production.batches_list"
+      - "mobile.process.powder_maker_drilldown"
+
+  # ============================================================================
+  # POWDER MAKER PLC STATE MACHINE
+  # ============================================================================
+  - id: "process.powdermaker.state"
+    domain: "process"
+    action: "load_powdermaker_state"
+    path: "/api/v1/process/powder-maker"
+    method: "GET"
+    purpose: "Fetches live PLC state machine status (SYSTEM_READY, MIXING, CRYSTALLIZATION, POWDER_MAKING, DISCHARGE)"
+    status: "active"
+    auth:
+      required: false
+    response:
+      status: 200
+      type: "object"
+      schema:
+        currentState: "string"
+        stateDisplayName: "string"
+        batchNumber: "integer"
+        currentWeightKg: "number"
+        targetWeightKg: "number"
+        progressPercent: "number"
+        elapsedMinutes: "number"
+        targetCycleMinutes: "number"
+        currentRateKgH: "number"
+        equipmentStatus: "string"
+    consumers:
+      - "mobile.home.current_process_card"
+      - "mobile.process.overview"
+
+  # ============================================================================
+  # STORAGE & LOAD CELL SYSTEM
+  # ============================================================================
+  - id: "storage.levels.load"
+    domain: "storage"
+    action: "load_storage_levels"
+    path: "/api/v1/storage/levels"
+    method: "GET"
+    purpose: "Real-time load cell data for Combined Silo (silo 1 + silo 2) and Syrup Tank with capacity metrics"
+    status: "active"
+    auth:
+      required: false
+    response:
+      status: 200
+      type: "object"
+      schema:
+        combinedSilo: "object"
+        syrupTank: "object"
+        validationStatus: "string"
+    consumers:
+      - "mobile.home.storage_card"
+      - "mobile.storage.dashboard"
+
+  # ============================================================================
+  # ENERGY CONSUMPTION & LIMITS
+  # ============================================================================
+  - id: "energy.overview.load"
+    domain: "energy"
+    action: "load_energy_overview"
+    path: "/api/v1/energy/overview"
+    method: "GET"
+    purpose: "Provides live power kW, hourly kWh, shift kWh, daily kWh against plant limits and specific kWh/kg"
+    status: "active"
+    auth:
+      required: false
+    response:
+      status: 200
+      type: "object"
+      schema:
+        livePowerKw: "number"
+        hourlyKwh: "number"
+        hourlyLimitKwh: "number"
+        shiftKwh: "number"
+        shiftLimitKwh: "number"
+        dailyKwh: "number"
+        dailyLimitKwh: "number"
+        efficiencyKwhPerKg: "number"
+        hourlyTrend: "array"
+    consumers:
+      - "mobile.home.energy_card"
+      - "mobile.energy.dashboard"
+
+  # ============================================================================
+  # ALARM LIFECYCLE MANAGEMENT
+  # ============================================================================
+  - id: "alarms.list.load"
+    domain: "alarms"
+    action: "load_alarms_list"
+    path: "/api/v1/alarms"
+    method: "GET"
+    purpose: "Fetches active alarms, warnings, and history with lifecycle states (TRIGGERED, ACTIVE, ACKNOWLEDGED, CLEARED)"
+    status: "active"
+    auth:
+      required: false
+    response:
+      status: 200
+      type: "object"
+      schema:
+        criticalCount: "integer"
+        warningCount: "integer"
+        alarms: "array"
+    consumers:
+      - "mobile.home.active_alerts"
+      - "mobile.alarms.screen"
+
+  - id: "alarms.item.acknowledge"
+    domain: "alarms"
+    action: "acknowledge_alarm"
+    path: "/api/v1/alarms/{id}/acknowledge"
+    method: "POST"
+    purpose: "Operator acknowledges an active plant alarm record with audit operator stamp"
+    status: "active"
+    auth:
+      required: false
+    parameters:
+      - name: "id"
+        in: "path"
+        type: "string"
+        required: true
+    response:
+      status: 200
+      type: "object"
+      schema:
+        success: "boolean"
+        alarmId: "string"
+        status: "string"
+        acknowledgedAt: "string"
+    consumers:
+      - "mobile.alarms.acknowledge_action"
+      - "mobile.home.quick_acknowledge"
