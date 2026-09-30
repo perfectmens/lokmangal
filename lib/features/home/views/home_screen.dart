@@ -20,17 +20,17 @@ class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _navScrollController = ScrollController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  int _selectedPageIndex = 0; // 0: Operations, 1: Executive
+  int _selectedPageIndex = 0;
   bool _isSettingsOpen = false;
 
   @override
   void initState() {
     super.initState();
-    // Executive is primary (index 0), Operations is secondary (index 1)
     HomeScreenPageRegistry.initialize(
       operationsPageBuilder: (context) => const OperationsPage(),
       executivePageBuilder: (context) => const ExecutivePage(),
     );
+    _selectedPageIndex = 0;
   }
 
   @override

@@ -93,12 +93,12 @@ class _SideDrawerState extends State<SideDrawer> {
                 physics: const BouncingScrollPhysics(),
                 padding: const EdgeInsets.symmetric(vertical: 12.0),
                 children: [
-                  // Executive C-Suite View (Slide 0 — PRIMARY)
+                  // Operations Floor View (Slide 0)
                   _buildDrawerItem(
                     index: 0,
-                    icon: Icons.insights_rounded,
-                    title: 'Executive (C-Suite)',
-                    subtitle: '20 TPD Capacity, Energy & Shift History',
+                    icon: Icons.precision_manufacturing_rounded,
+                    title: 'Operations (Floor)',
+                    subtitle: 'Powder Maker, Silos & Production Pace',
                     isSelected: widget.selectedPageIndex == 0,
                     onTap: () {
                       Navigator.pop(context);
@@ -106,12 +106,12 @@ class _SideDrawerState extends State<SideDrawer> {
                     },
                   ),
 
-                  // Operations Floor View (Slide 1)
+                  // Executive C-Suite View (Slide 1)
                   _buildDrawerItem(
                     index: 1,
-                    icon: Icons.precision_manufacturing_rounded,
-                    title: 'Operations (Floor)',
-                    subtitle: 'Powder Maker, Silos & Production Pace',
+                    icon: Icons.insights_rounded,
+                    title: 'Executive (C-Suite)',
+                    subtitle: '20 TPD Capacity, Energy & Shift History',
                     isSelected: widget.selectedPageIndex == 1,
                     onTap: () {
                       Navigator.pop(context);
