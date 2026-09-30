@@ -136,44 +136,56 @@ class PowderMakerData {
 }
 
 class StorageMetrics {
+  // Each silo holds max 5,000 kg. They alternate: Silo 1 fills first, then Silo 2.
   final int numberOfSilos;
-  final double combinedMaxCapacityKg;
-  final double combinedSilosKg;
-  final bool silosLoadCell;
+  final double siloMaxKg;          // per-silo capacity: 5,000 kg
+  final double silo1Kg;            // current weight in Silo 1
+  final double silo2Kg;            // current weight in Silo 2
   final double syrupTankMaxKg;
   final double syrupTankKg;
-  final bool syrupTankLoadCell;
 
   const StorageMetrics({
     required this.numberOfSilos,
-    required this.combinedMaxCapacityKg,
-    required this.combinedSilosKg,
-    required this.silosLoadCell,
+    required this.siloMaxKg,
+    required this.silo1Kg,
+    required this.silo2Kg,
     required this.syrupTankMaxKg,
     required this.syrupTankKg,
-    required this.syrupTankLoadCell,
   });
 
+  /// Combined weight across both silos
+  double get combinedSilosKg => silo1Kg + silo2Kg;
+
+  /// Total combined max (5,000 × 2 = 10,000 kg)
+  double get combinedMaxCapacityKg => siloMaxKg * numberOfSilos;
+
+  /// Which silo is currently active (filling)?
+  /// Silo 1 is active until full, then Silo 2 takes over.
+  int get activeSiloIndex => silo1Kg < siloMaxKg ? 1 : 2;
+
   factory StorageMetrics.fromJson(Map<String, dynamic> json) {
+    final siloMax = (json['silo_max_kg'] as num?)?.toDouble() ?? 5000.0;
+    // Support both new per-silo keys and legacy combined_silos_kg
+    final silo1 = (json['silo1_kg'] as num?)?.toDouble()
+        ?? (json['combined_silos_kg'] as num?)?.toDouble() ?? 3970.0;
+    final silo2 = (json['silo2_kg'] as num?)?.toDouble() ?? 0.0;
     return StorageMetrics(
       numberOfSilos: json['number_of_silos'] as int? ?? 2,
-      combinedMaxCapacityKg: (json['combined_max_capacity_kg'] as num?)?.toDouble() ?? 5000.0,
-      combinedSilosKg: (json['combined_silos_kg'] as num?)?.toDouble() ?? 3970.0,
-      silosLoadCell: json['silos_load_cell'] as bool? ?? true,
+      siloMaxKg: siloMax,
+      silo1Kg: silo1,
+      silo2Kg: silo2,
       syrupTankMaxKg: (json['syrup_tank_max_kg'] as num?)?.toDouble() ?? 5000.0,
       syrupTankKg: (json['syrup_tank_kg'] as num?)?.toDouble() ?? 3280.0,
-      syrupTankLoadCell: json['syrup_tank_load_cell'] as bool? ?? true,
     );
   }
 
   Map<String, dynamic> toJson() => {
         'number_of_silos': numberOfSilos,
-        'combined_max_capacity_kg': combinedMaxCapacityKg,
-        'combined_silos_kg': combinedSilosKg,
-        'silos_load_cell': silosLoadCell,
+        'silo_max_kg': siloMaxKg,
+        'silo1_kg': silo1Kg,
+        'silo2_kg': silo2Kg,
         'syrup_tank_max_kg': syrupTankMaxKg,
         'syrup_tank_kg': syrupTankKg,
-        'syrup_tank_load_cell': syrupTankLoadCell,
       };
 }
 
@@ -282,12 +294,11 @@ class PlantTelemetry {
       ),
       storage: const StorageMetrics(
         numberOfSilos: 2,
-        combinedMaxCapacityKg: 5000.0,
-        combinedSilosKg: 3970.0,
-        silosLoadCell: true,
+        siloMaxKg: 5000.0,
+        silo1Kg: 3970.0,   // Silo 1 is active and filling
+        silo2Kg: 0.0,      // Silo 2 is empty and on standby
         syrupTankMaxKg: 5000.0,
         syrupTankKg: 3280.0,
-        syrupTankLoadCell: true,
       ),
       electricity: const ElectricityMetrics(
         hourlyMaxKwh: 134.0,

@@ -38,53 +38,31 @@ class PowderMakerCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              Expanded(
+              const Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Powder Maker', style: AppTypography.heading2),
-                    Text(
-                      'Batch Capacity: ${data.batchCapacityKg.toInt()} kg',
-                      style: AppTypography.caption,
-                    ),
+                    Text('Powder Maker', style: AppTypography.heading2),
+                    Text('500 kg batch capacity', style: AppTypography.caption),
                   ],
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.tealLight,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.teal.withValues(alpha: 0.3)),
-                ),
-                child: Text(
-                  data.status.displayName,
-                  style: const TextStyle(
-                    color: AppColors.teal,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                  ),
-                ),
-              ),
+              // Current Status Badge (single, clear)
+              _StatusBadge(status: data.status),
             ],
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 16),
 
-          // 5-Stage Horizontal Flow Stepper
-          _buildStageStepper(),
-
-          const SizedBox(height: 18),
-
-          // Batch Weight & Load Cell Scale
+          // Batch Weight Row
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Batch Load Cell: ${data.batchCurrentKg.toStringAsFixed(1)} kg',
-                style: AppTypography.subtitle.copyWith(fontWeight: FontWeight.bold),
+                'Batch Weight',
+                style: AppTypography.subtitle.copyWith(fontWeight: FontWeight.w600),
               ),
               Text(
-                '$pctInt% of 500 kg',
+                '${data.batchCurrentKg.toStringAsFixed(1)} kg  •  $pctInt%',
                 style: const TextStyle(
                   color: AppColors.teal,
                   fontWeight: FontWeight.w700,
@@ -118,108 +96,69 @@ class PowderMakerCard extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildStageStepper() {
-    final stages = PowderMakerStatus.values;
-    final int activeIndex = stages.indexOf(data.status);
+class _StatusBadge extends StatelessWidget {
+  final PowderMakerStatus status;
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: List.generate(stages.length, (index) {
-            final stage = stages[index];
-            final bool isPassed = index < activeIndex;
-            final bool isCurrent = index == activeIndex;
+  const _StatusBadge({required this.status});
 
-            Color bgColor;
-            Color textColor;
-            List<BoxShadow> shadows;
+  @override
+  Widget build(BuildContext context) {
+    final Color bg;
+    final Color fg;
+    final IconData icon;
 
-            if (isCurrent) {
-              bgColor = AppColors.tealLight;
-              textColor = AppColors.teal;
-              shadows = [];
-            } else if (isPassed) {
-              bgColor = AppColors.surface;
-              textColor = AppColors.teal;
-              shadows = [];
-            } else {
-              bgColor = AppColors.surface;
-              textColor = AppColors.textMuted;
-              shadows = const [
-                BoxShadow(
-                  color: Color(0x0C0A0D2F),
-                  offset: Offset(2, 2),
-                  blurRadius: 4,
-                ),
-                BoxShadow(
-                  color: Colors.white,
-                  offset: Offset(-2, -2),
-                  blurRadius: 4,
-                ),
-              ];
-            }
-
-            return Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 2.0),
-                  decoration: BoxDecoration(
-                    color: bgColor,
-                    borderRadius: BorderRadius.circular(10),
-                    border: isCurrent
-                        ? Border.all(color: AppColors.teal, width: 1.2)
-                        : null,
-                    boxShadow: shadows,
-                  ),
-                  child: Column(
-                    children: [
-                      Icon(
-                        isPassed
-                            ? Icons.check_circle_rounded
-                            : isCurrent
-                                ? Icons.radio_button_checked_rounded
-                                : Icons.radio_button_unchecked_rounded,
-                        size: 14,
-                        color: textColor,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        _stageShortName(stage),
-                        textAlign: TextAlign.center,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 9.5,
-                          fontWeight: isCurrent ? FontWeight.bold : FontWeight.w500,
-                          color: textColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          }),
-        );
-      },
-    );
-  }
-
-  static String _stageShortName(PowderMakerStatus s) {
-    switch (s) {
+    switch (status) {
       case PowderMakerStatus.systemReady:
-        return 'Ready';
+        bg = AppColors.tealLight;
+        fg = AppColors.teal;
+        icon = Icons.check_circle_outline_rounded;
+        break;
       case PowderMakerStatus.mixing:
-        return 'Mixing';
+        bg = AppColors.orangeLight;
+        fg = AppColors.orange;
+        icon = Icons.loop_rounded;
+        break;
       case PowderMakerStatus.crystallization:
-        return 'Cryst.';
+        bg = const Color(0xFFEEF2FF);
+        fg = const Color(0xFF6366F1);
+        icon = Icons.ac_unit_rounded;
+        break;
       case PowderMakerStatus.powderMaking:
-        return 'Powder';
+        bg = AppColors.tealLight;
+        fg = AppColors.teal;
+        icon = Icons.grain_rounded;
+        break;
       case PowderMakerStatus.discharge:
-        return 'Discharge';
+        bg = AppColors.orangeLight;
+        fg = AppColors.orange;
+        icon = Icons.download_rounded;
+        break;
     }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: fg.withValues(alpha: 0.25)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 12, color: fg),
+          const SizedBox(width: 5),
+          Text(
+            status.displayName,
+            style: TextStyle(
+              color: fg,
+              fontWeight: FontWeight.bold,
+              fontSize: 11.5,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

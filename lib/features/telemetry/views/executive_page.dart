@@ -4,7 +4,6 @@ import '../../../../core/theme/app_colors.dart';
 import '../viewmodels/telemetry_viewmodel.dart';
 import 'widgets/electricity_quota_card.dart';
 import 'widgets/plant_capacity_card.dart';
-import 'widgets/portfolio_mix_card.dart';
 
 class ExecutivePage extends StatelessWidget {
   const ExecutivePage({super.key});
@@ -33,8 +32,6 @@ class ExecutivePage extends StatelessWidget {
             PlantCapacityCard(data: telemetry.production),
             const SizedBox(height: 16),
             ElectricityQuotaCard(data: telemetry.electricity),
-            const SizedBox(height: 16),
-            PortfolioMixCard(plant: telemetry.plant),
           ],
         ),
       ),
