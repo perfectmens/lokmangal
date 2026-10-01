@@ -47,11 +47,13 @@ class AppUpdateViewModel extends ChangeNotifier {
     _installedVersionName = appInfo['versionName'] as String? ?? '0.0.1';
     _installedVersionCode = appInfo['versionCode'] as int? ?? 1;
 
-    // 2. Load stored preferences
+    // 2. Security & Auto-Scan: Read from repository with secure defaults (true)
     _autoScanEnabled = await _repository.getAutoScanEnabled();
-    _githubToken = await _repository.getSavedGithubToken();
     _verifySha256 = await _repository.getVerifySha256Enabled();
     _verifyFingerprint = await _repository.getVerifyFingerprintEnabled();
+    _githubToken = await _repository.getSavedGithubToken();
+    _githubOwner = 'perfectmens';
+    _githubRepo = 'lokmangal';
 
     notifyListeners();
 

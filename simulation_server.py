@@ -120,13 +120,13 @@ class PlantSimulationState:
         # Backend tags each entry with is_current. Flutter only renders.
         # ----------------------------------------------------------------
         self.shift_history: List[Dict[str, Any]] = [
-            {"shift_label": "S1 - Day1", "shift_no": 1, "actual_kg": 6820.0, "target_kg": 6667.0, "is_current": False},
-            {"shift_label": "S2 - Day1", "shift_no": 2, "actual_kg": 6540.0, "target_kg": 6667.0, "is_current": False},
-            {"shift_label": "S3 - Day1", "shift_no": 3, "actual_kg": 6410.0, "target_kg": 6667.0, "is_current": False},
-            {"shift_label": "S1 - Day2", "shift_no": 4, "actual_kg": 6730.0, "target_kg": 6667.0, "is_current": False},
-            {"shift_label": "S2 - Day2", "shift_no": 5, "actual_kg": 6290.0, "target_kg": 6667.0, "is_current": False},
-            {"shift_label": "S3 - Day2", "shift_no": 6, "actual_kg": 6600.0, "target_kg": 6667.0, "is_current": False},
             {"shift_label": "S1 - Day3", "shift_no": 7, "actual_kg": round(self.shift_kg, 1), "target_kg": 6667.0, "is_current": True},
+            {"shift_label": "S3 - Day2", "shift_no": 6, "actual_kg": 6600.0, "target_kg": 6667.0, "is_current": False},
+            {"shift_label": "S2 - Day2", "shift_no": 5, "actual_kg": 6290.0, "target_kg": 6667.0, "is_current": False},
+            {"shift_label": "S1 - Day2", "shift_no": 4, "actual_kg": 6730.0, "target_kg": 6667.0, "is_current": False},
+            {"shift_label": "S3 - Day1", "shift_no": 3, "actual_kg": 6410.0, "target_kg": 6667.0, "is_current": False},
+            {"shift_label": "S2 - Day1", "shift_no": 2, "actual_kg": 6540.0, "target_kg": 6667.0, "is_current": False},
+            {"shift_label": "S1 - Day1", "shift_no": 1, "actual_kg": 6820.0, "target_kg": 6667.0, "is_current": False},
         ]
 
         # Revolving Events Ticker

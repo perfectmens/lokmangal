@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../app_update/views/settings_page.dart';
+import '../../auth/viewmodels/auth_viewmodel.dart';
 import '../../telemetry/views/executive_page.dart';
 import '../../telemetry/views/operations_page.dart';
 import '../page_registry/home_page_registry.dart';
@@ -104,6 +106,13 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              context.read<AuthViewModel>().logout();
+            },
+            child: const Text('Sign Out', style: TextStyle(color: Color(0xFFDC2626), fontWeight: FontWeight.w700)),
+          ),
           TextButton(
             onPressed: () {
               Navigator.pop(ctx);

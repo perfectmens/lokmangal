@@ -1,52 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_shadows.dart';
 import '../../../core/theme/app_typography.dart';
-import '../../../core/widgets/neumorphic_button.dart';
-import '../../../core/widgets/neumorphic_card.dart';
-import '../../../core/widgets/neumorphic_switch.dart';
-import '../../../core/widgets/neumorphic_text_field.dart';
-import '../repositories/app_update_repository_impl.dart';
-import '../viewmodels/app_update_viewmodel.dart';
 import 'widgets/update_card.dart';
 
-class SettingsPage extends StatefulWidget {
+class SettingsPage extends StatelessWidget {
   final VoidCallback onBack;
 
   const SettingsPage({super.key, required this.onBack});
 
   @override
-  State<SettingsPage> createState() => _SettingsPageState();
-}
-
-class _SettingsPageState extends State<SettingsPage> {
-  late final TextEditingController _tokenController;
-  late final TextEditingController _ownerController;
-  late final TextEditingController _repoController;
-  bool _obscureToken = true;
-
-  @override
-  void initState() {
-    super.initState();
-    final vm = context.read<AppUpdateViewModel>();
-    _tokenController = TextEditingController(text: vm.githubToken ?? '');
-    _ownerController = TextEditingController(text: vm.githubOwner);
-    _repoController = TextEditingController(text: vm.githubRepo);
-  }
-
-  @override
-  void dispose() {
-    _tokenController.dispose();
-    _ownerController.dispose();
-    _repoController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final vm = context.watch<AppUpdateViewModel>();
-
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -60,7 +24,7 @@ class _SettingsPageState extends State<SettingsPage> {
               Row(
                 children: [
                   GestureDetector(
-                    onTap: widget.onBack,
+                    onTap: onBack,
                     child: Container(
                       height: 44,
                       width: 44,
@@ -77,250 +41,13 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                   const SizedBox(width: 14),
-                  const Text('Settings', style: AppTypography.heading1),
+                  const Text('Settings & Updates', style: AppTypography.heading1),
                 ],
               ),
               const SizedBox(height: 20),
 
-              // 1. Remote App Update Card
+              // Remote App Update Card (OTA engine, version checker & installer)
               const UpdateCard(),
-              const SizedBox(height: 18),
-
-              // 2. Automated Scanning & Integrity Preferences
-              NeumorphicCard(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 36,
-                          height: 36,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.surface,
-                            boxShadow: AppShadows.circularButton(),
-                          ),
-                          child: const Icon(
-                            Icons.security_rounded,
-                            color: AppColors.teal,
-                            size: 18,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        const Text('Integrity & Auto-Scan', style: AppTypography.heading2),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Auto-scan Toggle
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Auto-Scan for Updates',
-                                style: AppTypography.subtitle.copyWith(fontWeight: FontWeight.w600),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                'Check for new releases automatically when opening the app.',
-                                style: AppTypography.caption,
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        NeumorphicSwitch(
-                          value: vm.autoScanEnabled,
-                          onChanged: (val) => vm.setAutoScan(val),
-                        ),
-                      ],
-                    ),
-                    const Divider(height: 28),
-
-                    // SHA-256 Checksum Toggle
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Verify SHA-256 Checksum',
-                                style: AppTypography.subtitle.copyWith(fontWeight: FontWeight.w600),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                'Strictly verify binary hash before initiating package installation.',
-                                style: AppTypography.caption,
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        NeumorphicSwitch(
-                          value: vm.verifySha256,
-                          onChanged: (val) => vm.setVerifySha256(val),
-                        ),
-                      ],
-                    ),
-                    const Divider(height: 28),
-
-                    // Signing Fingerprint Toggle
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Enforce Signing Fingerprint',
-                                style: AppTypography.subtitle.copyWith(fontWeight: FontWeight.w600),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                'Match APK signing certificate against release keystore fingerprint.',
-                                style: AppTypography.caption,
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        NeumorphicSwitch(
-                          value: vm.verifyFingerprint,
-                          onChanged: (val) => vm.setVerifyFingerprint(val),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: AppColors.background,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'EXPECTED CERTIFICATE SHA-256 FINGERPRINT:',
-                            style: AppTypography.caption.copyWith(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.textMuted,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          SelectableText(
-                            AppUpdateRepositoryImpl.expectedCertFingerprint,
-                            style: AppTypography.caption.copyWith(
-                              fontSize: 10,
-                              fontFamily: 'monospace',
-                              color: AppColors.teal,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 18),
-
-              // 3. GitHub Private Repository Access
-              NeumorphicCard(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 36,
-                          height: 36,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.surface,
-                            boxShadow: AppShadows.circularButton(),
-                          ),
-                          child: const Icon(
-                            Icons.hub_rounded,
-                            color: AppColors.orange,
-                            size: 18,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        const Text('GitHub Distribution Server', style: AppTypography.heading2),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: NeumorphicTextField(
-                            controller: _ownerController,
-                            label: 'Owner / Org',
-                            hint: 'perfectmens',
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: NeumorphicTextField(
-                            controller: _repoController,
-                            label: 'Repository',
-                            hint: 'lokmangal',
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 14),
-                    NeumorphicTextField(
-                      controller: _tokenController,
-                      label: 'GitHub Personal Access Token (for Private Repos)',
-                      hint: 'ghp_xxxx or gho_xxxx',
-                      obscureText: _obscureToken,
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscureToken ? Icons.visibility_rounded : Icons.visibility_off_rounded,
-                          size: 20,
-                          color: AppColors.textMuted,
-                        ),
-                        onPressed: () => setState(() => _obscureToken = !_obscureToken),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    NeumorphicButton(
-                      onPressed: () async {
-                        final messenger = ScaffoldMessenger.of(context);
-                        await vm.setRepositoryDetails(
-                          owner: _ownerController.text,
-                          repo: _repoController.text,
-                        );
-                        await vm.setGithubToken(_tokenController.text);
-                        if (!mounted) return;
-                        messenger.showSnackBar(
-                          const SnackBar(
-                            content: Text('GitHub settings saved successfully.'),
-                            backgroundColor: AppColors.teal,
-                          ),
-                        );
-                      },
-                      text: 'Save Server Configuration',
-                      icon: Icons.save_rounded,
-                      tone: NeumorphicTone.orange,
-                      isFullWidth: true,
-                    ),
-                  ],
-                ),
-              ),
               const SizedBox(height: 24),
             ],
           ),

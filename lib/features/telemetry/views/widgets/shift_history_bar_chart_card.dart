@@ -21,6 +21,11 @@ class ShiftHistoryBarChartCard extends StatelessWidget {
 
     final double maxKg = shifts.map((s) => s.targetKg).reduce((a, b) => a > b ? a : b) * 1.1;
 
+    // Ensure display order is new-to-old (current shift up, older shifts below)
+    final displayShifts = (shifts.isNotEmpty && !shifts.first.isCurrent && shifts.any((s) => s.isCurrent))
+        ? shifts.reversed.toList()
+        : shifts;
+
     return NeumorphicCard(
       padding: const EdgeInsets.all(18.0),
       child: Column(
@@ -61,14 +66,14 @@ class ShiftHistoryBarChartCard extends StatelessWidget {
           ),
           const SizedBox(height: 14),
 
-          // Scrollable bar list
+          // Scrollable bar list (Newest/Current shift on top, older below)
           SizedBox(
-            height: shifts.length * 48.0,
+            height: displayShifts.length * 48.0,
             child: ListView.builder(
               physics: const BouncingScrollPhysics(),
-              itemCount: shifts.length,
+              itemCount: displayShifts.length,
               itemBuilder: (context, i) {
-                final shift = shifts[i];
+                final shift = displayShifts[i];
                 final double pct = (shift.actualKg / maxKg).clamp(0.0, 1.0);
                 final double targetPct = (shift.targetKg / maxKg).clamp(0.0, 1.0);
                 final Color barColor = shift.isCurrent ? AppColors.orange : AppColors.teal;

@@ -16,12 +16,12 @@ void main() {
 
       final activePages = HomeScreenPageRegistry.activePages;
 
-      // Assert exactly 2 active pages are reflected in the application
+      // Assert exactly 2 active pages are reflected in the application (Executive first, Operations second)
       expect(activePages.length, 2);
-      expect(activePages[0].menuLabel, 'Operations');
-      expect(activePages[0].id, 'operations');
-      expect(activePages[1].menuLabel, 'Executive');
-      expect(activePages[1].id, 'executive');
+      expect(activePages[0].menuLabel, 'Executive');
+      expect(activePages[0].id, 'executive');
+      expect(activePages[1].menuLabel, 'Operations');
+      expect(activePages[1].id, 'operations');
     });
 
     test('Registry contains developer provisions for extra pages without reflecting in UI', () {

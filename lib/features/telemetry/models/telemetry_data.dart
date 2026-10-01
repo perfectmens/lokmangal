@@ -379,13 +379,13 @@ class PlantTelemetry {
         ProductionDataPoint(hour: '13:00', actualKg: 795.0, targetKg: 833.0),
       ],
       shiftHistory: const [
-        ShiftHistoryEntry(shiftLabel: 'S1 - Day1', actualKg: 6820.0, targetKg: 6667.0, isCurrent: false),
-        ShiftHistoryEntry(shiftLabel: 'S2 - Day1', actualKg: 6540.0, targetKg: 6667.0, isCurrent: false),
-        ShiftHistoryEntry(shiftLabel: 'S3 - Day1', actualKg: 6410.0, targetKg: 6667.0, isCurrent: false),
-        ShiftHistoryEntry(shiftLabel: 'S1 - Day2', actualKg: 6730.0, targetKg: 6667.0, isCurrent: false),
-        ShiftHistoryEntry(shiftLabel: 'S2 - Day2', actualKg: 6290.0, targetKg: 6667.0, isCurrent: false),
-        ShiftHistoryEntry(shiftLabel: 'S3 - Day2', actualKg: 6600.0, targetKg: 6667.0, isCurrent: false),
         ShiftHistoryEntry(shiftLabel: 'S1 - Day3', actualKg: 3410.0, targetKg: 6667.0, isCurrent: true),
+        ShiftHistoryEntry(shiftLabel: 'S3 - Day2', actualKg: 6600.0, targetKg: 6667.0, isCurrent: false),
+        ShiftHistoryEntry(shiftLabel: 'S2 - Day2', actualKg: 6290.0, targetKg: 6667.0, isCurrent: false),
+        ShiftHistoryEntry(shiftLabel: 'S1 - Day2', actualKg: 6730.0, targetKg: 6667.0, isCurrent: false),
+        ShiftHistoryEntry(shiftLabel: 'S3 - Day1', actualKg: 6410.0, targetKg: 6667.0, isCurrent: false),
+        ShiftHistoryEntry(shiftLabel: 'S2 - Day1', actualKg: 6540.0, targetKg: 6667.0, isCurrent: false),
+        ShiftHistoryEntry(shiftLabel: 'S1 - Day1', actualKg: 6820.0, targetKg: 6667.0, isCurrent: false),
       ],
     );
   }

@@ -49,21 +49,7 @@ class HomeScreenPageRegistry {
     _registry.clear();
 
     // -------------------------------------------------------------
-    // Page 0: Operations View (Floor Dashboard)
-    // -------------------------------------------------------------
-    _registry.add(
-      HomePageModule(
-        id: 'operations',
-        menuLabel: 'Operations',
-        title: 'Operations (Floor)',
-        icon: Icons.precision_manufacturing_rounded,
-        builder: operationsPageBuilder,
-        isVisibleInUi: true,
-      ),
-    );
-
-    // -------------------------------------------------------------
-    // Page 1: Executive View (C-Suite Dashboard)
+    // Page 0: Executive View (C-Suite Dashboard)
     // -------------------------------------------------------------
     _registry.add(
       HomePageModule(
@@ -72,6 +58,20 @@ class HomeScreenPageRegistry {
         title: 'Executive (C-Suite)',
         icon: Icons.insights_rounded,
         builder: executivePageBuilder,
+        isVisibleInUi: true,
+      ),
+    );
+
+    // -------------------------------------------------------------
+    // Page 1: Operations View (Floor Dashboard)
+    // -------------------------------------------------------------
+    _registry.add(
+      HomePageModule(
+        id: 'operations',
+        menuLabel: 'Operations',
+        title: 'Operations (Floor)',
+        icon: Icons.precision_manufacturing_rounded,
+        builder: operationsPageBuilder,
         isVisibleInUi: true,
       ),
     );

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:provider/provider.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_shadows.dart';
+import '../../../auth/viewmodels/auth_viewmodel.dart';
 
 class SideDrawer extends StatefulWidget {
   final int selectedPageIndex;
@@ -93,12 +95,12 @@ class _SideDrawerState extends State<SideDrawer> {
                 physics: const BouncingScrollPhysics(),
                 padding: const EdgeInsets.symmetric(vertical: 12.0),
                 children: [
-                  // Operations Floor View (Slide 0)
+                  // Executive C-Suite View (Slide 0)
                   _buildDrawerItem(
                     index: 0,
-                    icon: Icons.precision_manufacturing_rounded,
-                    title: 'Operations (Floor)',
-                    subtitle: 'Powder Maker, Silos & Production Pace',
+                    icon: Icons.insights_rounded,
+                    title: 'Executive (C-Suite)',
+                    subtitle: '20 TPD Capacity, Energy & Shift History',
                     isSelected: widget.selectedPageIndex == 0,
                     onTap: () {
                       Navigator.pop(context);
@@ -106,12 +108,12 @@ class _SideDrawerState extends State<SideDrawer> {
                     },
                   ),
 
-                  // Executive C-Suite View (Slide 1)
+                  // Operations Floor View (Slide 1)
                   _buildDrawerItem(
                     index: 1,
-                    icon: Icons.insights_rounded,
-                    title: 'Executive (C-Suite)',
-                    subtitle: '20 TPD Capacity, Energy & Shift History',
+                    icon: Icons.precision_manufacturing_rounded,
+                    title: 'Operations (Floor)',
+                    subtitle: 'Powder Maker, Silos & Production Pace',
                     isSelected: widget.selectedPageIndex == 1,
                     onTap: () {
                       Navigator.pop(context);
@@ -134,6 +136,19 @@ class _SideDrawerState extends State<SideDrawer> {
                     onTap: () {
                       Navigator.pop(context);
                       widget.onOpenSettings();
+                    },
+                  ),
+
+                  // Operator Sign Out
+                  _buildDrawerItem(
+                    index: -2,
+                    icon: Icons.logout_rounded,
+                    title: 'Sign Out',
+                    subtitle: 'Operator: demo',
+                    isSelected: false,
+                    onTap: () {
+                      Navigator.pop(context);
+                      context.read<AuthViewModel>().logout();
                     },
                   ),
                 ],
