@@ -57,6 +57,7 @@ void main() {
     expect(find.byType(BottomNavigationBar), findsNothing);
 
     // Verify Executive content is on primary initial Slide 0
+    expect(find.text('Corelife Wholefoods'), findsWidgets);
     expect(find.text('Shift-wise Output'), findsOneWidget);
     expect(find.text('Plant Design Capacity'), findsOneWidget);
     expect(find.text('Electricity Consumption'), findsOneWidget);

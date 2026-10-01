@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../viewmodels/telemetry_viewmodel.dart';
 import 'widgets/electricity_line_graph_card.dart';
+import 'widgets/operations_header_banner.dart';
 import 'widgets/plant_capacity_card.dart';
 import 'widgets/shift_history_bar_chart_card.dart';
 
@@ -30,6 +31,14 @@ class ExecutivePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Plant Name & Status Banner (CoreLife WholeFoods)
+            OperationsHeaderBanner(
+              telemetry: telemetry,
+              isSimulated: vm.isSimulated,
+              shiftInfo: vm.formattedShiftInfo,
+            ),
+            const SizedBox(height: 16),
+
             // 1. Plant capacity KPIs
             PlantCapacityCard(data: telemetry.production),
             const SizedBox(height: 16),
