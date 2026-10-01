@@ -57,10 +57,10 @@ class OperationsHeaderBanner extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: isSimulated ? AppColors.orangeLight : AppColors.tealLight,
+                  color: AppColors.tealLight,
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
-                    color: (isSimulated ? AppColors.orange : AppColors.teal).withValues(alpha: 0.35),
+                    color: AppColors.teal.withValues(alpha: 0.35),
                   ),
                 ),
                 child: Row(
@@ -69,18 +69,18 @@ class OperationsHeaderBanner extends StatelessWidget {
                     Container(
                       width: 7,
                       height: 7,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         shape: BoxShape.circle,
-                        color: isSimulated ? AppColors.orange : AppColors.teal,
+                        color: AppColors.teal,
                       ),
                     ),
                     const SizedBox(width: 5),
-                    Text(
-                      isSimulated ? 'SIMULATED' : 'LIVE',
+                    const Text(
+                      'STANDALONE',
                       style: TextStyle(
                         fontSize: 10.5,
                         fontWeight: FontWeight.w800,
-                        color: isSimulated ? AppColors.orange : AppColors.teal,
+                        color: AppColors.teal,
                         letterSpacing: 0.5,
                       ),
                     ),
@@ -110,7 +110,7 @@ class OperationsHeaderBanner extends StatelessWidget {
                 ],
               ),
               const Text(
-                'Plant Floor Active',
+                '100% Offline Engine',
                 style: TextStyle(
                   fontSize: 11.5,
                   fontWeight: FontWeight.w700,

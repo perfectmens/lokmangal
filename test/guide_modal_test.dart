@@ -48,6 +48,7 @@ void main() {
     expect(find.text('Over-The-Air (OTA) Updates'), findsOneWidget);
     expect(find.text('Automated Update Detection'), findsOneWidget);
     expect(find.text('1-Tap Background Download & Install'), findsOneWidget);
+    expect(find.text('100% In-App Calculation Engine'), findsOneWidget);
     expect(find.text('Got It'), findsOneWidget);
 
     // Tap Back -> Step 3

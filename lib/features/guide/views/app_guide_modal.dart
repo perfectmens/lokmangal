@@ -160,10 +160,10 @@ class _AppGuideModalState extends State<AppGuideModal> {
           icon: Icons.verified_user_rounded,
         ),
         GuideFeatureItem(
-          label: 'Telemetry Server Configuration',
+          label: '100% In-App Calculation Engine',
           detail:
-              'Seamlessly adjust backend REST endpoints between simulated demo and live factory network servers.',
-          icon: Icons.router_rounded,
+              'Operates fully standalone without any external backend. All telemetry, cycles, and metrics run natively on-device.',
+          icon: Icons.memory_rounded,
         ),
       ],
     ),
