@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
 class AppTypography {
-  static const String fontFamily = 'RookeryNew';
+  static const String fontFamily = 'Roboto';
 
   static const TextStyle display = TextStyle(
     fontFamily: fontFamily,

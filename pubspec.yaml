@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 0.0.13+15
+version: 0.0.14+16
 
 environment:
   sdk: ^3.13.1
@@ -52,15 +52,15 @@ flutter:
     - assets/logo.png
 
   fonts:
-    - family: RookeryNew
+    - family: Roboto
       fonts:
-        - asset: assets/fonts/RookeryNew-Light.ttf
+        - asset: assets/fonts/Roboto-Light.ttf
           weight: 300
-        - asset: assets/fonts/RookeryNew-Regular.ttf
+        - asset: assets/fonts/Roboto-Regular.ttf
           weight: 400
-        - asset: assets/fonts/RookeryNew-Medium.ttf
+        - asset: assets/fonts/Roboto-Medium.ttf
           weight: 500
-        - asset: assets/fonts/RookeryNew-Bold.ttf
+        - asset: assets/fonts/Roboto-Bold.ttf
           weight: 700
     - family: RobotoCondensed
       fonts:
@@ -71,4 +71,14 @@ flutter:
         - asset: assets/fonts/RobotoCondensed-Medium.ttf
           weight: 500
         - asset: assets/fonts/RobotoCondensed-Bold.ttf
+          weight: 700
+    - family: RookeryNew
+      fonts:
+        - asset: assets/fonts/RookeryNew-Light.ttf
+          weight: 300
+        - asset: assets/fonts/RookeryNew-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/RookeryNew-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/RookeryNew-Bold.ttf
           weight: 700
