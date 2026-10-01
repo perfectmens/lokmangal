@@ -52,14 +52,14 @@ class ElectricityLineGraphCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: AppColors.orangeLight,
+                  color: AppColors.background,
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: AppColors.targetLineOrange.withValues(alpha: 0.3)),
+                  border: Border.all(color: AppColors.borderLight),
                 ),
                 child: Text(
                   '${data.hourlyKwh.toStringAsFixed(1)} kWh',
                   style: const TextStyle(
-                    color: AppColors.targetLineOrange,
+                    color: AppColors.textPrimary,
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
                   ),

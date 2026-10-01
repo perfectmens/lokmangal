@@ -36,19 +36,19 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('STEP 3 OF 4'), findsOneWidget);
-    expect(find.text('Side Panel & Quick Switcher'), findsOneWidget);
+    expect(find.text('Navigation Panel & View Switcher'), findsOneWidget);
     expect(find.text('Open from Anywhere'), findsOneWidget);
-    expect(find.text('One-Tap Slide Switching'), findsOneWidget);
+    expect(find.text('One-Tap View Switching'), findsOneWidget);
 
     // Tap Next -> Step 4: Settings & Updates
     await tester.tap(find.text('Next'));
     await tester.pumpAndSettle();
 
     expect(find.text('STEP 4 OF 4'), findsOneWidget);
-    expect(find.text('Over-The-Air (OTA) Updates'), findsOneWidget);
+    expect(find.text('Software Updates & Maintenance'), findsOneWidget);
     expect(find.text('Automated Update Detection'), findsOneWidget);
-    expect(find.text('1-Tap Background Download & Install'), findsOneWidget);
-    expect(find.text('100% In-App Calculation Engine'), findsOneWidget);
+    expect(find.text('1-Tap Background Update'), findsOneWidget);
+    expect(find.text('Realtime Industrial Telemetry'), findsOneWidget);
     expect(find.text('Got It'), findsOneWidget);
 
     // Tap Back -> Step 3

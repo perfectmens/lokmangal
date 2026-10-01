@@ -160,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                         NeumorphicTextField(
                           controller: _usernameController,
                           label: 'Username',
-                          hint: 'demo',
+                          hint: 'Enter username',
                           keyboardType: TextInputType.text,
                         ),
                         const SizedBox(height: 16),
@@ -169,7 +169,7 @@ class _LoginPageState extends State<LoginPage> {
                         NeumorphicTextField(
                           controller: _passwordController,
                           label: 'Password',
-                          hint: 'demo',
+                          hint: 'Enter password',
                           obscureText: _obscurePassword,
                           suffixIcon: IconButton(
                             icon: Icon(
@@ -236,21 +236,16 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         const SizedBox(height: 16),
 
-                        // Quick Demo Autofill Helper
+                        // Autofill Helper
                         Center(
-                          child: TextButton.icon(
+                          child: TextButton(
                             onPressed: _fillDemoCredentials,
-                            icon: const Icon(
-                              Icons.key_rounded,
-                              size: 16,
-                              color: AppColors.teal,
-                            ),
-                            label: const Text(
-                              'Auto-fill demo / demo',
+                            child: const Text(
+                              'Auto-fill credentials',
                               style: TextStyle(
-                                color: AppColors.teal,
+                                color: AppColors.textMuted,
                                 fontSize: 12,
-                                fontWeight: FontWeight.w700,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),

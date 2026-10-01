@@ -96,12 +96,12 @@ class _SideDrawerState extends State<SideDrawer> {
                 physics: const BouncingScrollPhysics(),
                 padding: const EdgeInsets.symmetric(vertical: 12.0),
                 children: [
-                  // Executive C-Suite View (Slide 0)
+                  // Executive View
                   _buildDrawerItem(
                     index: 0,
                     icon: Icons.insights_rounded,
-                    title: 'Executive (C-Suite)',
-                    subtitle: '20 TPD Capacity, Energy & Shift History',
+                    title: 'Executive',
+                    subtitle: 'Capacity, Energy & Shift History',
                     isSelected: widget.selectedPageIndex == 0,
                     onTap: () {
                       Navigator.pop(context);
@@ -109,11 +109,11 @@ class _SideDrawerState extends State<SideDrawer> {
                     },
                   ),
 
-                  // Operations Floor View (Slide 1)
+                  // Operations View
                   _buildDrawerItem(
                     index: 1,
                     icon: Icons.precision_manufacturing_rounded,
-                    title: 'Operations (Floor)',
+                    title: 'Operations',
                     subtitle: 'Powder Maker, Silos & Production Pace',
                     isSelected: widget.selectedPageIndex == 1,
                     onTap: () {
@@ -131,7 +131,7 @@ class _SideDrawerState extends State<SideDrawer> {
                     index: -1,
                     icon: Icons.system_update_rounded,
                     title: 'Settings & Updates',
-                    subtitle: 'OTA Engine & Server Configuration',
+                    subtitle: 'Software Version & Device Info',
                     isSelected: false,
                     isHighlight: true,
                     onTap: () {
@@ -140,12 +140,12 @@ class _SideDrawerState extends State<SideDrawer> {
                     },
                   ),
 
-                  // User Guide & Walkthrough
+                  // User Guide
                   _buildDrawerItem(
                     index: -3,
                     icon: Icons.menu_book_rounded,
-                    title: 'User Guide & Walkthrough',
-                    subtitle: 'Executive, Operations, Panel & Updates',
+                    title: 'User Guide',
+                    subtitle: 'Application Features & Walkthrough',
                     isSelected: false,
                     onTap: () {
                       Navigator.pop(context);
@@ -153,12 +153,12 @@ class _SideDrawerState extends State<SideDrawer> {
                     },
                   ),
 
-                  // Operator Sign Out
+                  // Sign Out
                   _buildDrawerItem(
                     index: -2,
                     icon: Icons.logout_rounded,
                     title: 'Sign Out',
-                    subtitle: 'Operator: demo',
+                    subtitle: 'End current session',
                     isSelected: false,
                     isHighlight: true,
                     onTap: () {
@@ -176,26 +176,13 @@ class _SideDrawerState extends State<SideDrawer> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 8,
-                        height: 8,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.teal,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      const Text(
-                        'Auraliss Corelife',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                    ],
+                  const Text(
+                    'Auraliss Corelife',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textSecondary,
+                    ),
                   ),
                   Text(
                     _version,

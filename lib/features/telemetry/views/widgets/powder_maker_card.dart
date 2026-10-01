@@ -46,12 +46,23 @@ class PowderMakerCard extends StatelessWidget {
                 'Batch Weight',
                 style: AppTypography.subtitle.copyWith(fontWeight: FontWeight.w600),
               ),
-              Text(
-                '${data.batchCurrentKg.toStringAsFixed(1)} kg  •  $pctInt%',
-                style: const TextStyle(
-                  color: AppColors.teal,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 13,
+              RichText(
+                text: TextSpan(
+                  text: '${data.batchCurrentKg.toStringAsFixed(1)} kg ',
+                  style: const TextStyle(
+                    color: AppColors.textPrimary,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 13,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: '·  $pctInt%',
+                      style: const TextStyle(
+                        color: AppColors.teal,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

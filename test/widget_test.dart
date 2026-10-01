@@ -80,9 +80,9 @@ void main() {
     await tester.tap(find.byType(Image));
     await tester.pumpAndSettle();
 
-    // Verify User Guide & Walkthrough item is present in Drawer
-    expect(find.text('User Guide & Walkthrough'), findsOneWidget);
-    await tester.tap(find.text('User Guide & Walkthrough'));
+    // Verify User Guide item is present in Drawer
+    expect(find.text('User Guide'), findsOneWidget);
+    await tester.tap(find.text('User Guide'));
     await tester.pumpAndSettle();
 
     // Verify Guide Modal opened on Step 1

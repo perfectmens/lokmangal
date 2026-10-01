@@ -107,12 +107,23 @@ class ElectricityQuotaCard extends StatelessWidget {
                 color: AppColors.textPrimary,
               ),
             ),
-            Text(
-              '${current.toStringAsFixed(1)} / ${max.toInt()} kWh (${(pct * 100).toInt()}%)',
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-                color: barColor,
+            RichText(
+              text: TextSpan(
+                text: '${current.toStringAsFixed(1)} / ${max.toInt()} kWh ',
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.textSecondary,
+                ),
+                children: [
+                  TextSpan(
+                    text: '(${(pct * 100).toInt()}%)',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: barColor,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

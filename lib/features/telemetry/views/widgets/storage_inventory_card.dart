@@ -99,8 +99,8 @@ class StorageInventoryCard extends StatelessWidget {
   }) {
     final double pct = (currentKg / maxKg).clamp(0.0, 1.0);
     final int pctInt = (pct * 100).toInt();
-    final Color accent = AppColors.teal;
-    final Color bg = AppColors.tealLight;
+    final Color accent = isActive ? AppColors.teal : AppColors.textMuted;
+    final Color bg = isActive ? AppColors.tealLight : AppColors.background;
 
     return Container(
       padding: const EdgeInsets.all(12.0),
@@ -108,8 +108,8 @@ class StorageInventoryCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(14),
         border: isActive
-            ? Border.all(color: accent.withValues(alpha: 0.35), width: 1.0)
-            : null,
+            ? Border.all(color: AppColors.teal.withValues(alpha: 0.35), width: 1.0)
+            : Border.all(color: AppColors.borderLight, width: 0.8),
         boxShadow: const [
           BoxShadow(color: Color(0x0A0A0D2F), offset: Offset(3, 3), blurRadius: 6),
           BoxShadow(color: Colors.white, offset: Offset(-3, -3), blurRadius: 6),
@@ -123,7 +123,11 @@ class StorageInventoryCard extends StatelessWidget {
               Container(
                 width: 28,
                 height: 28,
-                decoration: BoxDecoration(shape: BoxShape.circle, color: bg),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: bg,
+                  border: isActive ? null : Border.all(color: AppColors.borderLight),
+                ),
                 child: Icon(Icons.grain_rounded, color: accent, size: 15),
               ),
               const SizedBox(width: 8),
@@ -143,13 +147,14 @@ class StorageInventoryCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isActive ? bg : AppColors.background,
                   borderRadius: BorderRadius.circular(8),
+                  border: isActive ? null : Border.all(color: AppColors.borderLight),
                 ),
                 child: Text(
                   isActive ? 'Active' : 'Standby',
                   style: TextStyle(
                     fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: isActive ? accent : AppColors.textMuted,
+                    fontWeight: FontWeight.w600,
+                    color: isActive ? AppColors.teal : AppColors.textMuted,
                   ),
                 ),
               ),
@@ -166,7 +171,7 @@ class StorageInventoryCard extends StatelessWidget {
           ),
           Text(
             'of ${maxKg.toInt()} kg  ($pctInt%)',
-            style: TextStyle(fontSize: 11, color: accent, fontWeight: FontWeight.w600),
+            style: const TextStyle(fontSize: 11, color: AppColors.textSecondary, fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 8),
           ClipRRect(
@@ -174,7 +179,7 @@ class StorageInventoryCard extends StatelessWidget {
             child: LinearProgressIndicator(
               value: pct,
               backgroundColor: AppColors.background,
-              valueColor: AlwaysStoppedAnimation<Color>(accent),
+              valueColor: AlwaysStoppedAnimation<Color>(isActive ? AppColors.teal : AppColors.borderLight),
               minHeight: 6,
             ),
           ),
@@ -239,7 +244,7 @@ class StorageInventoryCard extends StatelessWidget {
               ),
               Text(
                 'Max: ${maxKg.toInt()} kg  (${(pct * 100).toInt()}%)',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: accentColor),
+                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppColors.textSecondary),
               ),
             ],
           ),

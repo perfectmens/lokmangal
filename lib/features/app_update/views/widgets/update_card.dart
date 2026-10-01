@@ -64,8 +64,8 @@ class UpdateCard extends StatelessWidget {
 
           // State-Driven Rendering
           if (state is UpdateIdle) ...[
-            Text(
-              'Remotely check for new builds, verified SHA-256 binaries, and OTA release updates from GitHub.',
+            const Text(
+              'Check for available software updates and system enhancements.',
               style: AppTypography.body,
             ),
             const SizedBox(height: 16),
@@ -88,7 +88,7 @@ class UpdateCard extends StatelessWidget {
                     ),
                     SizedBox(height: 12),
                     Text(
-                      'Querying GitHub Releases for new updates...',
+                      'Checking for updates...',
                       style: AppTypography.caption,
                     ),
                   ],
@@ -273,11 +273,11 @@ class UpdateCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 4),
                   Text(
-                    'SHA-256 Checksum: MATCHED\nFingerprint Check: VERIFIED',
+                    'Package verified. Ready to install.',
                     style: AppTypography.caption.copyWith(
-                      color: AppColors.textPrimary,
+                      color: AppColors.textSecondary,
                       fontWeight: FontWeight.w500,
                     ),
                   ),

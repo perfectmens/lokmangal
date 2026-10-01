@@ -61,15 +61,15 @@ class HourlyProductionLineGraphCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: AppColors.tealLight,
+                  color: AppColors.background,
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: AppColors.telemetryTeal.withValues(alpha: 0.3)),
+                  border: Border.all(color: AppColors.borderLight),
                 ),
                 child: Text(
                   '$elapsedHours of $totalHours hrs (${(elapsedPct * 100).toInt()}%)',
                   style: const TextStyle(
-                    color: AppColors.teal,
-                    fontWeight: FontWeight.bold,
+                    color: AppColors.textSecondary,
+                    fontWeight: FontWeight.w600,
                     fontSize: 11,
                   ),
                 ),

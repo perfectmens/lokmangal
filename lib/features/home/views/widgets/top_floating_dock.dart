@@ -68,17 +68,22 @@ class TopFloatingDock extends StatelessWidget {
                           duration: const Duration(milliseconds: 200),
                           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
                           decoration: BoxDecoration(
-                            color: isSelected ? AppColors.tealLight : AppColors.surface,
+                            color: isSelected ? AppColors.teal.withValues(alpha: 0.05) : AppColors.surface,
                             borderRadius: BorderRadius.circular(20),
                             border: isSelected
-                                ? Border.all(color: AppColors.teal.withValues(alpha: 0.5), width: 1.0)
+                                ? Border.all(color: AppColors.teal.withValues(alpha: 0.3), width: 1.0)
                                 : null,
                             boxShadow: isSelected
-                                ? [
+                                ? const [
                                     BoxShadow(
-                                      color: AppColors.telemetryTealGlow,
-                                      blurRadius: 8,
-                                      offset: const Offset(0, 2),
+                                      color: Color(0x0A0A0D2F),
+                                      offset: Offset(2, 2),
+                                      blurRadius: 4,
+                                    ),
+                                    BoxShadow(
+                                      color: Colors.white,
+                                      offset: Offset(-2, -2),
+                                      blurRadius: 4,
                                     ),
                                   ]
                                 : const [

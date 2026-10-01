@@ -112,25 +112,25 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.pop(ctx);
               context.read<AuthViewModel>().logout();
             },
-            child: const Text('Sign Out', style: TextStyle(color: AppColors.primaryOrange, fontWeight: FontWeight.w700)),
+            child: const Text('Sign Out', style: TextStyle(color: AppColors.error, fontWeight: FontWeight.w600)),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(ctx);
               AppGuideModal.show(context);
             },
-            child: const Text('App Guide', style: TextStyle(color: AppColors.teal, fontWeight: FontWeight.w700)),
+            child: const Text('App Guide', style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w600)),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(ctx);
               setState(() => _isSettingsOpen = true);
             },
-            child: const Text('Settings & Updates', style: TextStyle(color: AppColors.orange, fontWeight: FontWeight.w700)),
+            child: const Text('Settings', style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w600)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Close', style: TextStyle(color: AppColors.textSecondary, fontWeight: FontWeight.w700)),
+            child: const Text('Close', style: TextStyle(color: AppColors.textSecondary, fontWeight: FontWeight.w500)),
           ),
         ],
       ),

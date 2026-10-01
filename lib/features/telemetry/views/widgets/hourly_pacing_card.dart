@@ -59,14 +59,15 @@ class HourlyPacingCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: AppColors.tealLight,
-                  borderRadius: BorderRadius.circular(12),
+                  color: AppColors.background,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: AppColors.borderLight),
                 ),
                 child: Text(
                   '${data.plantCapacityTpd.toInt()} TPD Rating',
                   style: const TextStyle(
-                    color: AppColors.teal,
-                    fontWeight: FontWeight.bold,
+                    color: AppColors.textSecondary,
+                    fontWeight: FontWeight.w600,
                     fontSize: 11,
                   ),
                 ),
@@ -259,8 +260,9 @@ class HourlyPacingCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2.5),
             decoration: BoxDecoration(
-              color: accentColor.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(8),
+              color: AppColors.background,
+              borderRadius: BorderRadius.circular(6),
+              border: Border.all(color: AppColors.borderLight),
             ),
             child: Text(
               statusText,

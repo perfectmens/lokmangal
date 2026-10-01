@@ -57,34 +57,17 @@ class OperationsHeaderBanner extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: AppColors.tealLight,
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(
-                    color: AppColors.teal.withValues(alpha: 0.35),
-                  ),
+                  color: AppColors.background,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: AppColors.borderLight),
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 7,
-                      height: 7,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.teal,
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    const Text(
-                      'STANDALONE',
-                      style: TextStyle(
-                        fontSize: 10.5,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.teal,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                  ],
+                child: const Text(
+                  '20 TPD Rating',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textSecondary,
+                  ),
                 ),
               ),
             ],
@@ -93,28 +76,15 @@ class OperationsHeaderBanner extends StatelessWidget {
           const Divider(height: 1),
           const SizedBox(height: 10),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  const Icon(Icons.schedule_rounded, size: 15, color: AppColors.textMuted),
-                  const SizedBox(width: 5),
-                  Text(
-                    shiftInfo,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                ],
-              ),
-              const Text(
-                '100% Offline Engine',
-                style: TextStyle(
-                  fontSize: 11.5,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.teal,
+              const Icon(Icons.schedule_rounded, size: 15, color: AppColors.textMuted),
+              const SizedBox(width: 6),
+              Text(
+                shiftInfo,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.textSecondary,
                 ),
               ),
             ],

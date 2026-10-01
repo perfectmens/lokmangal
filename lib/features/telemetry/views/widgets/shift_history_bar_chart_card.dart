@@ -79,7 +79,7 @@ class ShiftHistoryBarChartCard extends StatelessWidget {
                 final double pct = (shift.actualKg / maxKg).clamp(0.0, 1.0);
                 final double targetPct = (shift.targetKg / maxKg).clamp(0.0, 1.0);
                 final Color barColor = shift.isCurrent ? AppColors.primaryOrange : AppColors.historicalTeal;
-                final Color bgColor = shift.isCurrent ? AppColors.orangeTint20 : AppColors.historicalTeal.withValues(alpha: 0.18);
+                final Color bgColor = shift.isCurrent ? AppColors.orangeTint10 : AppColors.tealTint10;
 
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
@@ -144,10 +144,10 @@ class ShiftHistoryBarChartCard extends StatelessWidget {
                                 padding: const EdgeInsets.only(left: 8),
                                 child: Text(
                                   '${(shift.actualKg / 1000).toStringAsFixed(2)}t',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 11,
-                                    fontWeight: FontWeight.bold,
-                                    color: barColor,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.textPrimary,
                                   ),
                                 ),
                               ),

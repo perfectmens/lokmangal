@@ -52,15 +52,16 @@ class PlantCapacityCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: AppColors.tealLight,
-                  borderRadius: BorderRadius.circular(12),
+                  color: AppColors.background,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: AppColors.borderLight),
                 ),
                 child: Text(
                   '${data.shiftsPerDay} Shifts/Day',
                   style: const TextStyle(
-                    color: AppColors.teal,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 11.5,
+                    color: AppColors.textSecondary,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 11,
                   ),
                 ),
               ),
@@ -216,23 +217,6 @@ class PlantCapacityCard extends StatelessWidget {
                   ),
                 ),
               ),
-              if (isLive)
-                Container(
-                  width: 7,
-                  height: 7,
-                  margin: const EdgeInsets.only(left: 4),
-                  decoration: BoxDecoration(
-                    color: color,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: color.withValues(alpha: 0.4),
-                        blurRadius: 4,
-                        spreadRadius: 1,
-                      ),
-                    ],
-                  ),
-                ),
             ],
           ),
           const SizedBox(height: 4),

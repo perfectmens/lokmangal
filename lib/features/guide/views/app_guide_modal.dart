@@ -56,7 +56,7 @@ class _AppGuideModalState extends State<AppGuideModal> {
 
   static const List<GuideStepData> _steps = [
     GuideStepData(
-      category: 'EXECUTIVE C-SUITE · SLIDE 0',
+      category: 'EXECUTIVE OVERVIEW',
       title: 'Plant Capacity & High-Level KPIs',
       description:
           'Strategic high-level overview tailored for leadership, plant managers, and decision-makers.',
@@ -84,7 +84,7 @@ class _AppGuideModalState extends State<AppGuideModal> {
       ],
     ),
     GuideStepData(
-      category: 'OPERATIONS FLOOR · SLIDE 1',
+      category: 'OPERATIONS MONITOR',
       title: 'Floor Controls & Production Pacing',
       description:
           'Real-time machine pacing and operational instrumentation for floor supervisors and line technicians.',
@@ -112,10 +112,10 @@ class _AppGuideModalState extends State<AppGuideModal> {
       ],
     ),
     GuideStepData(
-      category: 'NAVIGATION · SIDE PANEL',
-      title: 'Side Panel & Quick Switcher',
+      category: 'NAVIGATION & PANELS',
+      title: 'Navigation Panel & View Switcher',
       description:
-          'Instant, non-intrusive navigation drawer to jump between executive analytics and floor controls.',
+          'Instant, non-intrusive navigation drawer to switch between executive analytics and floor controls.',
       icon: Icons.menu_open_rounded,
       accentColor: AppColors.teal,
       items: [
@@ -126,22 +126,22 @@ class _AppGuideModalState extends State<AppGuideModal> {
           icon: Icons.swipe_right_rounded,
         ),
         GuideFeatureItem(
-          label: 'One-Tap Slide Switching',
+          label: 'One-Tap View Switching',
           detail:
-              'Instantly switch between Executive (C-Suite) and Operations (Floor) slides without losing context.',
+              'Instantly switch between Executive and Operations views without losing context.',
           icon: Icons.tab_rounded,
         ),
         GuideFeatureItem(
-          label: 'Operator Session & Logout',
+          label: 'Operator Session',
           detail:
-              'Verify active operator session (demo) and securely sign out with one tap.',
+              'Manage active operator session and securely sign out with one tap.',
           icon: Icons.account_circle_rounded,
         ),
       ],
     ),
     GuideStepData(
-      category: 'LIFECYCLE · SETTINGS & UPDATES',
-      title: 'Over-The-Air (OTA) Updates',
+      category: 'SYSTEM & UPDATES',
+      title: 'Software Updates & Maintenance',
       description:
           'Built-in software delivery engine ensuring your plant terminal always runs the latest validated build.',
       icon: Icons.system_update_rounded,
@@ -150,19 +150,19 @@ class _AppGuideModalState extends State<AppGuideModal> {
         GuideFeatureItem(
           label: 'Automated Update Detection',
           detail:
-              'Scans GitHub Releases in the background for signed APK binaries with version comparison.',
+              'Checks for verified application updates with version comparison and integrity validation.',
           icon: Icons.cloud_download_rounded,
         ),
         GuideFeatureItem(
-          label: '1-Tap Background Download & Install',
+          label: '1-Tap Background Update',
           detail:
-              'Direct APK download with live percentage progress, checksum integrity validation, and instant install.',
+              'Direct download with live percentage progress, checksum verification, and instant installation.',
           icon: Icons.verified_user_rounded,
         ),
         GuideFeatureItem(
-          label: '100% In-App Calculation Engine',
+          label: 'Realtime Industrial Telemetry',
           detail:
-              'Operates fully standalone without any external backend. All telemetry, cycles, and metrics run natively on-device.',
+              'Telemetry metrics, shift pacing rates, and energy telemetry compute continuously on-device.',
           icon: Icons.memory_rounded,
         ),
       ],

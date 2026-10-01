@@ -61,7 +61,7 @@ class AuthViewModel extends ChangeNotifier {
       return true;
     } else {
       _isAuthenticated = false;
-      _errorMessage = 'Invalid credentials. Please use demo / demo';
+      _errorMessage = 'Invalid credentials. Please check your username and password.';
       _isLoading = false;
       notifyListeners();
       return false;
