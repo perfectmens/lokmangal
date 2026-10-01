@@ -34,12 +34,12 @@ class ExecutivePage extends StatelessWidget {
             PlantCapacityCard(data: telemetry.production),
             const SizedBox(height: 16),
 
-            // 2. Shift-wise horizontal bar chart (backend-owned data)
-            ShiftHistoryBarChartCard(shifts: telemetry.shiftHistory),
+            // 2. Electricity line graph (backend-owned hourly trend)
+            ElectricityLineGraphCard(data: telemetry.electricity),
             const SizedBox(height: 16),
 
-            // 3. Electricity line graph (backend-owned hourly trend)
-            ElectricityLineGraphCard(data: telemetry.electricity),
+            // 3. Shift-wise horizontal bar chart (backend-owned data)
+            ShiftHistoryBarChartCard(shifts: telemetry.shiftHistory),
           ],
         ),
       ),

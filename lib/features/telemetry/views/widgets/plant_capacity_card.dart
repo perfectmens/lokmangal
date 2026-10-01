@@ -141,24 +141,28 @@ class PlantCapacityCard extends StatelessWidget {
 
           const SizedBox(height: 14),
 
-          // Operational Targets Summary
+          // Operational Targets Summary with Realtime Produced KG
           Row(
             children: [
               Expanded(
                 child: _buildMetricTile(
-                  label: 'Shift Target',
-                  value: '${data.shiftTargetKg.toInt()} kg',
-                  subtext: '${data.shiftDurationHours}h Duration',
+                  label: 'Shift Target & Actual',
+                  actualValue: '${data.shiftActualKg.toInt()} kg',
+                  targetText: 'Target: ${data.shiftTargetKg.toInt()} kg',
+                  subtext: '${data.shiftDurationHours}h · ${((data.shiftActualKg / data.shiftTargetKg) * 100).toStringAsFixed(1)}%',
                   color: AppColors.teal,
+                  isLive: true,
                 ),
               ),
               const SizedBox(width: 10),
               Expanded(
                 child: _buildMetricTile(
-                  label: 'Hourly Target',
-                  value: '${data.hourlyTargetKg.toInt()} kg',
-                  subtext: 'Pacing Target',
+                  label: 'Hourly Target & Actual',
+                  actualValue: '${data.hourlyActualKg.toInt()} kg/h',
+                  targetText: 'Target: ${data.hourlyTargetKg.toInt()} kg/h',
+                  subtext: 'Pacing · ${((data.hourlyActualKg / data.hourlyTargetKg) * 100).toStringAsFixed(1)}%',
                   color: AppColors.orange,
+                  isLive: true,
                 ),
               ),
             ],
@@ -170,9 +174,11 @@ class PlantCapacityCard extends StatelessWidget {
 
   Widget _buildMetricTile({
     required String label,
-    required String value,
+    required String actualValue,
+    required String targetText,
     required String subtext,
     required Color color,
+    bool isLive = false,
   }) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
@@ -195,28 +201,65 @@ class PlantCapacityCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 11.5,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textMuted,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 10.5,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textMuted,
+                  ),
+                ),
+              ),
+              if (isLive)
+                Container(
+                  width: 7,
+                  height: 7,
+                  margin: const EdgeInsets.only(left: 4),
+                  decoration: BoxDecoration(
+                    color: color,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: color.withValues(alpha: 0.4),
+                        blurRadius: 4,
+                        spreadRadius: 1,
+                      ),
+                    ],
+                  ),
+                ),
+            ],
           ),
           const SizedBox(height: 4),
           Text(
-            value,
+            actualValue,
             style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w800,
+              fontSize: 17,
+              fontWeight: FontWeight.w900,
               color: AppColors.textPrimary,
+              letterSpacing: -0.3,
             ),
           ),
+          const SizedBox(height: 2),
+          Text(
+            targetText,
+            style: const TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textSecondary,
+            ),
+          ),
+          const SizedBox(height: 1),
           Text(
             subtext,
             style: TextStyle(
               fontSize: 10.5,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w700,
               color: color,
             ),
           ),

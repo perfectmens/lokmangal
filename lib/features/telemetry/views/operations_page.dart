@@ -38,17 +38,19 @@ class OperationsPage extends StatelessWidget {
               shiftInfo: vm.formattedShiftInfo,
             ),
             const SizedBox(height: 16),
-            PowderMakerCard(data: telemetry.powderMaker),
-            const SizedBox(height: 16),
-            StorageInventoryCard(data: telemetry.storage),
-            const SizedBox(height: 16),
+            // 1. Production Targets Console (Executive-equivalent data with operational visualization)
             HourlyPacingCard(data: telemetry.production),
             const SizedBox(height: 16),
-            // 8-hour shift window production line graph (backend-owned data)
+            // 2. 8-hour shift window hourly production graph (Target reference + live half-trend)
             HourlyProductionLineGraphCard(
               data: telemetry.hourlyProductionHistory,
               production: telemetry.production,
             ),
+            const SizedBox(height: 16),
+            // 3. Equipment & Processing Cards
+            PowderMakerCard(data: telemetry.powderMaker),
+            const SizedBox(height: 16),
+            StorageInventoryCard(data: telemetry.storage),
           ],
         ),
       ),

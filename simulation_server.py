@@ -108,10 +108,7 @@ class PlantSimulationState:
             {"hour": "08:00", "actual_kg": 818.0, "target_kg": 833.0},
             {"hour": "09:00", "actual_kg": 841.0, "target_kg": 833.0},
             {"hour": "10:00", "actual_kg": 829.0, "target_kg": 833.0},
-            {"hour": "11:00", "actual_kg": 835.0, "target_kg": 833.0},
-            {"hour": "12:00", "actual_kg": 822.0, "target_kg": 833.0},
-            {"hour": "13:00", "actual_kg": 824.0, "target_kg": 833.0},
-            {"hour": "14:00", "actual_kg": round(self.current_rate_kg_h, 1), "target_kg": 833.0},
+            {"hour": "11:00", "actual_kg": round(self.current_rate_kg_h, 1), "target_kg": 833.0},
         ]
 
         # ----------------------------------------------------------------

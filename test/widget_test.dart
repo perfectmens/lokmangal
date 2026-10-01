@@ -70,6 +70,8 @@ void main() {
     await tester.pumpAndSettle();
 
     // Verify Operations content (Slide 1)
+    expect(find.text('Production Targets'), findsOneWidget);
+    expect(find.text('Hourly Production Pacing'), findsOneWidget);
     expect(find.text('Powder Maker'), findsOneWidget);
     expect(find.text('Storage Inventory'), findsOneWidget);
   });

@@ -374,9 +374,7 @@ class PlantTelemetry {
         ProductionDataPoint(hour: '08:00', actualKg: 818.0, targetKg: 833.0),
         ProductionDataPoint(hour: '09:00', actualKg: 841.0, targetKg: 833.0),
         ProductionDataPoint(hour: '10:00', actualKg: 829.0, targetKg: 833.0),
-        ProductionDataPoint(hour: '11:00', actualKg: 835.0, targetKg: 833.0),
-        ProductionDataPoint(hour: '12:00', actualKg: 822.0, targetKg: 833.0),
-        ProductionDataPoint(hour: '13:00', actualKg: 795.0, targetKg: 833.0),
+        ProductionDataPoint(hour: '11:00', actualKg: 795.0, targetKg: 833.0),
       ],
       shiftHistory: const [
         ShiftHistoryEntry(shiftLabel: 'S1 - Day3', actualKg: 3410.0, targetKg: 6667.0, isCurrent: true),
