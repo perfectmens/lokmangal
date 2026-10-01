@@ -75,5 +75,20 @@ void main() {
     expect(find.text('Hourly Production Pacing'), findsOneWidget);
     expect(find.text('Powder Maker'), findsOneWidget);
     expect(find.text('Storage Inventory'), findsOneWidget);
+
+    // Open Side Drawer via Logo Tap
+    await tester.tap(find.byType(Image));
+    await tester.pumpAndSettle();
+
+    // Verify User Guide & Walkthrough item is present in Drawer
+    expect(find.text('User Guide & Walkthrough'), findsOneWidget);
+    await tester.tap(find.text('User Guide & Walkthrough'));
+    await tester.pumpAndSettle();
+
+    // Verify Guide Modal opened on Step 1
+    expect(find.text('Plant Capacity & High-Level KPIs'), findsOneWidget);
+    await tester.tap(find.text('Next'));
+    await tester.pumpAndSettle();
+    expect(find.text('Floor Controls & Production Pacing'), findsOneWidget);
   });
 }

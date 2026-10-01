@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../app_update/views/settings_page.dart';
 import '../../auth/viewmodels/auth_viewmodel.dart';
+import '../../guide/views/app_guide_modal.dart';
 import '../../telemetry/views/executive_page.dart';
 import '../../telemetry/views/operations_page.dart';
 import '../page_registry/home_page_registry.dart';
@@ -116,13 +117,20 @@ class _HomeScreenState extends State<HomeScreen> {
           TextButton(
             onPressed: () {
               Navigator.pop(ctx);
+              AppGuideModal.show(context);
+            },
+            child: const Text('App Guide', style: TextStyle(color: AppColors.teal, fontWeight: FontWeight.w700)),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(ctx);
               setState(() => _isSettingsOpen = true);
             },
             child: const Text('Settings & Updates', style: TextStyle(color: AppColors.orange, fontWeight: FontWeight.w700)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Close', style: TextStyle(color: AppColors.teal, fontWeight: FontWeight.w700)),
+            child: const Text('Close', style: TextStyle(color: AppColors.textSecondary, fontWeight: FontWeight.w700)),
           ),
         ],
       ),

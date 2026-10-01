@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_shadows.dart';
 import '../../../auth/viewmodels/auth_viewmodel.dart';
+import '../../../guide/views/app_guide_modal.dart';
 
 class SideDrawer extends StatefulWidget {
   final int selectedPageIndex;
@@ -136,6 +137,19 @@ class _SideDrawerState extends State<SideDrawer> {
                     onTap: () {
                       Navigator.pop(context);
                       widget.onOpenSettings();
+                    },
+                  ),
+
+                  // User Guide & Walkthrough
+                  _buildDrawerItem(
+                    index: -3,
+                    icon: Icons.menu_book_rounded,
+                    title: 'User Guide & Walkthrough',
+                    subtitle: 'Executive, Operations, Panel & Updates',
+                    isSelected: false,
+                    onTap: () {
+                      Navigator.pop(context);
+                      AppGuideModal.show(context);
                     },
                   ),
 
