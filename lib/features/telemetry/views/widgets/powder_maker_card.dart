@@ -106,8 +106,8 @@ class _StatusBadge extends StatelessWidget {
         icon = Icons.loop_rounded;
         break;
       case PowderMakerStatus.crystallization:
-        bg = const Color(0xFFEEF2FF);
-        fg = const Color(0xFF6366F1);
+        bg = AppColors.tealLight;
+        fg = AppColors.mutedTeal;
         icon = Icons.ac_unit_rounded;
         break;
       case PowderMakerStatus.powderMaking:

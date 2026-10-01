@@ -160,6 +160,7 @@ class _SideDrawerState extends State<SideDrawer> {
                     title: 'Sign Out',
                     subtitle: 'Operator: demo',
                     isSelected: false,
+                    isHighlight: true,
                     onTap: () {
                       Navigator.pop(context);
                       context.read<AuthViewModel>().logout();
@@ -235,7 +236,7 @@ class _SideDrawerState extends State<SideDrawer> {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10.0),
           decoration: BoxDecoration(
-            color: isSelected ? AppColors.teal.withValues(alpha: 0.08) : Colors.transparent,
+            color: isSelected ? AppColors.tealLight : Colors.transparent,
             borderRadius: BorderRadius.circular(14),
             border: isSelected
                 ? Border.all(color: AppColors.teal.withValues(alpha: 0.3), width: 1.0)

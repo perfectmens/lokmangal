@@ -284,7 +284,7 @@ class HourlyPacingCard extends StatelessWidget {
           height: 5,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: isCurrent ? AppColors.teal : AppColors.textMuted.withValues(alpha: 0.5),
+            color: isCurrent ? AppColors.primaryOrange : AppColors.textMuted.withValues(alpha: 0.5),
           ),
         ),
         const SizedBox(width: 4),
@@ -293,7 +293,7 @@ class HourlyPacingCard extends StatelessWidget {
           style: TextStyle(
             fontSize: 9.5,
             fontWeight: isCurrent ? FontWeight.bold : FontWeight.w500,
-            color: isCurrent ? AppColors.teal : AppColors.textMuted,
+            color: isCurrent ? AppColors.primaryOrange : AppColors.textMuted,
           ),
         ),
       ],

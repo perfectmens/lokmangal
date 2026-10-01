@@ -307,9 +307,9 @@ class UpdateCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(14.0),
               decoration: BoxDecoration(
-                color: const Color(0xFFFDE8E8),
+                color: AppColors.error.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: const Color(0xFFF8B4B4)),
+                border: Border.all(color: AppColors.error.withValues(alpha: 0.3)),
               ),
               child: Row(
                 children: [

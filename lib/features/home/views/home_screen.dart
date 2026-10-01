@@ -112,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.pop(ctx);
               context.read<AuthViewModel>().logout();
             },
-            child: const Text('Sign Out', style: TextStyle(color: Color(0xFFDC2626), fontWeight: FontWeight.w700)),
+            child: const Text('Sign Out', style: TextStyle(color: AppColors.primaryOrange, fontWeight: FontWeight.w700)),
           ),
           TextButton(
             onPressed: () {

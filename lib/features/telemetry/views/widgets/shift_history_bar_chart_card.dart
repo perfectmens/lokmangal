@@ -57,9 +57,11 @@ class ShiftHistoryBarChartCard extends StatelessWidget {
               // Legend
               Row(
                 children: [
-                  _legendDot(AppColors.teal, 'Done'),
+                  _legendDot(AppColors.historicalTeal, 'Done'),
                   const SizedBox(width: 10),
-                  _legendDot(AppColors.orange, 'Live'),
+                  _legendDot(AppColors.primaryOrange, 'Live'),
+                  const SizedBox(width: 10),
+                  _legendLine(AppColors.targetOrange, 'Target'),
                 ],
               ),
             ],
@@ -76,8 +78,8 @@ class ShiftHistoryBarChartCard extends StatelessWidget {
                 final shift = displayShifts[i];
                 final double pct = (shift.actualKg / maxKg).clamp(0.0, 1.0);
                 final double targetPct = (shift.targetKg / maxKg).clamp(0.0, 1.0);
-                final Color barColor = shift.isCurrent ? AppColors.orange : AppColors.teal;
-                final Color bgColor = shift.isCurrent ? AppColors.orangeLight : AppColors.tealLight;
+                final Color barColor = shift.isCurrent ? AppColors.primaryOrange : AppColors.historicalTeal;
+                final Color bgColor = shift.isCurrent ? AppColors.orangeTint20 : AppColors.historicalTeal.withValues(alpha: 0.18);
 
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
@@ -111,15 +113,15 @@ class ShiftHistoryBarChartCard extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            // Target marker line
+                            // Target marker line (Target Orange #F6A560)
                             FractionallySizedBox(
                               widthFactor: targetPct,
                               child: Container(
                                 height: 28,
                                 alignment: Alignment.centerRight,
                                 child: Container(
-                                  width: 1.5,
-                                  color: AppColors.textMuted.withValues(alpha: 0.5),
+                                  width: 2.0,
+                                  color: AppColors.targetOrange,
                                 ),
                               ),
                             ),
@@ -173,6 +175,21 @@ class ShiftHistoryBarChartCard extends StatelessWidget {
               color: color.withValues(alpha: 0.25),
               border: Border.all(color: color, width: 1.5),
               borderRadius: BorderRadius.circular(3),
+            ),
+          ),
+          const SizedBox(width: 4),
+          Text(label, style: const TextStyle(fontSize: 10, color: AppColors.textMuted)),
+        ],
+      );
+
+  Widget _legendLine(Color color, String label) => Row(
+        children: [
+          Container(
+            width: 8,
+            height: 2.5,
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(1),
             ),
           ),
           const SizedBox(width: 4),

@@ -194,10 +194,10 @@ class _LoginPageState extends State<LoginPage> {
                               vertical: 10.0,
                             ),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFFDE8E8),
+                              color: AppColors.error.withValues(alpha: 0.08),
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
-                                color: const Color(0xFFF87171),
+                                color: AppColors.error.withValues(alpha: 0.3),
                                 width: 0.8,
                               ),
                             ),
@@ -205,7 +205,7 @@ class _LoginPageState extends State<LoginPage> {
                               children: [
                                 const Icon(
                                   Icons.error_outline_rounded,
-                                  color: Color(0xFFDC2626),
+                                  color: AppColors.error,
                                   size: 18,
                                 ),
                                 const SizedBox(width: 8),
@@ -213,7 +213,7 @@ class _LoginPageState extends State<LoginPage> {
                                   child: Text(
                                     authVm.errorMessage!,
                                     style: const TextStyle(
-                                      color: Color(0xFFDC2626),
+                                      color: AppColors.error,
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
                                     ),
