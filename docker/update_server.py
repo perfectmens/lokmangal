@@ -26,7 +26,7 @@ GITHUB_TOKEN = os.getenv("GITHUB_TOKEN", "")
 
 @app.get("/health")
 def health():
-    return {"status": "healthy", "service": "auraliss-update-engine"}
+    return {"status": "healthy", "service": "Auraliss-update-engine"}
 
 @app.get("/api/v1/app/latest")
 async def get_latest_version():
